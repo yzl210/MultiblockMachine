@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "multiblockmachine:block/controller"
+    },
+    "facing=south": {
+      "model": "multiblockmachine:block/controller",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "multiblockmachine:block/controller",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "multiblockmachine:block/controller",
+      "y": 90
+    }
+  }
+}

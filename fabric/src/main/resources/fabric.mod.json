@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "multiblockmachine",
+  "version": "${version}",
+  "name": "Multiblock Machine",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "6LeoMC"
+  ],
+  "contact_": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "GNU GPL3",
+  "icon_": "assets/examplemod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "cn.leomc.multiblockmachine.fabric.MultiblockMachineFabric"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16.4",
+    "architectury": ">=1.1.55"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

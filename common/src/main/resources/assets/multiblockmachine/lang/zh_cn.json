@@ -1,0 +1,9 @@
+{
+  "block.multiblockmachine.controller":"控制器",
+
+  "text.multiblockmachine.notformed": "未检测到机器，请检查结构是否完整以及控制器的方向是否正确！",
+
+  "itemGroup.multiblockmachine.default": "多方块机器",
+
+  "multiblockmachine.multiblockmachine.test": "测试机器"
+}

@@ -1,0 +1,14 @@
+{
+  "block.multiblockmachine.controller":"Controller",
+  "block.multiblockmachine.item_input_slot":"Item Input Slot",
+  "block.multiblockmachine.item_output_slot":"Item Output Slot",
+
+  "container.multiblockmachine.item_input_slot":"Item Input Slot",
+  "container.multiblockmachine.item_output_slot":"Item Output Slot",
+
+  "text.multiblockmachine.notformed": "Machine not detected, please check whether the structure is complete and the direction of the controller!",
+
+  "itemGroup.multiblockmachine.default": "Multiblock Machine",
+
+  "multiblockmachine.multiblockmachine.test": "Test Machine"
+}
