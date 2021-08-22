@@ -1,0 +1,26 @@
+{
+  "type": "multiblockmachine:machine",
+  "machine": "test_datapack:test_machine",
+  "inputs": [
+    {
+      "item": "minecraft:cobblestone"
+    },
+    {
+      "item": "minecraft:coal",
+      "count": 2
+    }
+  ],
+  "results": [
+    {
+      "type": "item",
+      "item": "minecraft:stone",
+      "count": 2
+    },
+    {
+      "type": "energy",
+      "amount": 18000
+    }
+  ],
+  "energy": 10000,
+  "energyMaxInput": 50
+}

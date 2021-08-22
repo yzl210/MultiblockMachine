@@ -1,9 +1,17 @@
 {
   "block.multiblockmachine.controller":"控制器",
 
-  "text.multiblockmachine.notformed": "未检测到机器，请检查结构是否完整以及控制器的方向是否正确！",
+  "block.multiblockmachine.item_input_slot": "物品输入槽",
+  "block.multiblockmachine.item_output_slot": "物品输出槽",
+  "block.multiblockmachine.energy_input_slot": "能量输入槽",
+  "block.multiblockmachine.energy_output_slot": "能量输出槽",
 
-  "itemGroup.multiblockmachine.default": "多方块机器",
+  "container.multiblockmachine.item_input_slot": "物品输入槽",
+  "container.multiblockmachine.item_output_slot": "物品输出槽",
+  "container.multiblockmachine.energy_input_slot": "能量输入槽",
+  "container.multiblockmachine.energy_output_slot": "能量输出槽",
 
-  "multiblockmachine.multiblockmachine.test": "测试机器"
+  "text.multiblockmachine.not_formed": "未检测到机器，请检查结构是否完整以及控制器的方向是否正确！",
+
+  "itemGroup.multiblockmachine.default": "多方块机器"
 }

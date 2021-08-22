@@ -1,29 +1,18 @@
 package cn.leomc.multiblockmachine.common.menu.itemslot;
 
-import cn.leomc.multiblockmachine.common.blockentity.itemslot.IContainerProvider;
+import cn.leomc.multiblockmachine.common.api.IItemSlot;
+import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.menu.BaseMenu;
-import cn.leomc.multiblockmachine.common.registry.BlockRegistry;
 import cn.leomc.multiblockmachine.common.registry.ContainerMenuRegistry;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class ItemSlotMenu extends BaseMenu {
-    public ItemSlotMenu(BlockEntity blockEntity, Player player, Inventory inventory, int windowId) {
+public class ItemSlotMenu extends BaseMenu<ItemSlotBlockEntity> {
+    public ItemSlotMenu(ItemSlotBlockEntity blockEntity, Player player, Inventory inventory, int windowId) {
         super(ContainerMenuRegistry.ITEM_SLOT.get(), blockEntity, player, inventory, windowId);
-        if(blockEntity instanceof IContainerProvider)
-            addSlot(((IContainerProvider) blockEntity).getContainer(), 0, 40,50,2,18);
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        BlockPos pos = blockEntity.getBlockPos();
-        return player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+        addSlot(((IItemSlot) blockEntity).getContainer(), 0, 40, 50, 2, 18);
     }
 
 

@@ -2,13 +2,17 @@
   "block.multiblockmachine.controller":"Controller",
   "block.multiblockmachine.item_input_slot":"Item Input Slot",
   "block.multiblockmachine.item_output_slot":"Item Output Slot",
+  "block.multiblockmachine.energy_input_slot": "Energy Input Slot",
+  "block.multiblockmachine.energy_output_slot": "Energy Output Slot",
 
   "container.multiblockmachine.item_input_slot":"Item Input Slot",
   "container.multiblockmachine.item_output_slot":"Item Output Slot",
+  "container.multiblockmachine.energy_input_slot": "Energy Input Slot",
+  "container.multiblockmachine.energy_output_slot": "Energy Output Slot",
 
-  "text.multiblockmachine.notformed": "Machine not detected, please check whether the structure is complete and the direction of the controller!",
 
-  "itemGroup.multiblockmachine.default": "Multiblock Machine",
+  "text.multiblockmachine.not_formed": "Machine not detected, please check whether the structure is complete and the direction of the controller!",
+  "text.multiblockmachine.fluid_tank": "%s: %s mB",
 
-  "multiblockmachine.multiblockmachine.test": "Test Machine"
+  "itemGroup.multiblockmachine.default": "Multiblock Machine"
 }

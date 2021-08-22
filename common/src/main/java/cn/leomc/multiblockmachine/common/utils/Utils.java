@@ -1,25 +1,32 @@
 package cn.leomc.multiblockmachine.common.utils;
 
-import me.shedaniel.architectury.platform.Platform;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class Utils {
 
-    public static <T extends BlockEntity> T getBlockEntity(String name) {
-        if (Platform.isForge()) {
-            try {
-                return (T) Class.forName("cn.leomc.multiblockmachine.forge.common.blockentity.Forge" + name + "BlockEntity").newInstance();
-            } catch (ClassNotFoundException | ClassCastException | IllegalAccessException | InstantiationException e) {
-                e.printStackTrace();
-            }
+    public static JsonElement readJson(Resource resource) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(resource.getInputStream())) {
+            return new JsonParser().parse(reader);
         }
-        try {
-            return (T) Class.forName("cn.leomc.multiblockmachine.common.blockentity." + name + "BlockEntity").newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
+    public static JsonElement readJson(File file) throws IOException {
+        try (FileReader reader = new FileReader(file)) {
+            return new JsonParser().parse(reader);
+        }
+    }
+
+    public static <T> T getRegistryItem(Registry<T> registry, ResourceLocation id) {
+        return registry.getOptional(id).orElseThrow(() -> new RuntimeException(registry + " with id + \"" + id + "\" not found!"));
+    }
 }

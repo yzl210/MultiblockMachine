@@ -2,13 +2,16 @@ package cn.leomc.multiblockmachine.common.registry;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.block.ControllerBlock;
+import cn.leomc.multiblockmachine.common.block.energyslot.EnergyInputSlotBlock;
+import cn.leomc.multiblockmachine.common.block.energyslot.EnergyOutputSlotBlock;
+import cn.leomc.multiblockmachine.common.block.fluidslot.FluidInputSlotBlock;
+import cn.leomc.multiblockmachine.common.block.fluidslot.FluidOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemOutputSlotBlock;
 import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.Block;
-
 
 import java.util.function.Supplier;
 
@@ -22,12 +25,22 @@ public class BlockRegistry {
 
     public static final RegistrySupplier<Block> ITEM_OUTPUT_SLOT = register("item_output_slot", ItemOutputSlotBlock::new);
 
+    public static final RegistrySupplier<Block> ENERGY_INPUT_SLOT = register("energy_input_slot", EnergyInputSlotBlock::new);
 
-    public static void register(){
+    public static final RegistrySupplier<Block> ENERGY_OUTPUT_SLOT = register("energy_output_slot", EnergyOutputSlotBlock::new);
+
+    public static final RegistrySupplier<Block> FLUID_INPUT_SLOT = register("fluid_input_slot", FluidInputSlotBlock::new);
+
+    public static final RegistrySupplier<Block> FLUID_OUTPUT_SLOT = register("fluid_output_slot", FluidOutputSlotBlock::new);
+
+
+
+
+    public static void register() {
         BLOCKS.register();
     }
 
-    private static RegistrySupplier<Block> register(String name, Supplier<? extends Block> supplier){
+    private static RegistrySupplier<Block> register(String name, Supplier<? extends Block> supplier) {
         return BLOCKS.register(name, supplier);
     }
 

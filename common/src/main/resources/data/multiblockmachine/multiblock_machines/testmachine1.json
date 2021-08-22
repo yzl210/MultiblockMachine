@@ -1,0 +1,16 @@
+{
+  "id": "test_datapack:test_machine1",
+  "blocks": [
+    {
+      "left": -1,
+      "up": 0,
+      "behind": 0,
+      "block": {
+        "id": "minecraft:stone",
+        "states": {
+          "lit": true
+        }
+      }
+    }
+  ]
+}

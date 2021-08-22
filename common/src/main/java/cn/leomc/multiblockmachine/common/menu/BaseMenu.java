@@ -1,5 +1,6 @@
 package cn.leomc.multiblockmachine.common.menu;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -10,13 +11,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 
-public class BaseMenu extends AbstractContainerMenu {
+public class BaseMenu<BE extends BlockEntity> extends AbstractContainerMenu {
 
     public final Player player;
-    protected final BlockEntity blockEntity;
+    protected final BE blockEntity;
     protected final Inventory playerInventory;
 
-    protected BaseMenu(MenuType<?> type, BlockEntity blockEntity, Player player, Inventory inventory, int windowId) {
+    protected BaseMenu(MenuType<?> type, BE blockEntity, Player player, Inventory inventory, int windowId) {
         super(type, windowId);
         this.blockEntity = blockEntity;
         this.player = player;
@@ -25,10 +26,10 @@ public class BaseMenu extends AbstractContainerMenu {
     }
 
 
-    protected int addSlot(Container inventory, int index, int x, int y, int amount, int dx) {
+    protected int addSlot(Container container, int index, int x, int y, int amount, int dx) {
         for (int i = 0; i < amount; i++) {
             int finalIndex = index;
-            addSlot(new Slot(inventory, finalIndex, x, y) {
+            addSlot(new Slot(container, finalIndex, x, y) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return container.canPlaceItem(finalIndex, stack);
@@ -40,9 +41,9 @@ public class BaseMenu extends AbstractContainerMenu {
         return index;
     }
 
-    protected int addSlot(Container inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+    protected int addSlot(Container container, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
         for (int j = 0; j < verAmount; j++) {
-            index = addSlot(inventory, index, x, y, horAmount, dx);
+            index = addSlot(container, index, x, y, horAmount, dx);
             y += dy;
         }
         return index;
@@ -61,11 +62,12 @@ public class BaseMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
-        return false;
+    public boolean stillValid(Player player) {
+        BlockPos pos = blockEntity.getBlockPos();
+        return player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
     }
 
-    public BlockEntity getBlockEntity() {
+    public BE getBlockEntity() {
         return blockEntity;
     }
 }

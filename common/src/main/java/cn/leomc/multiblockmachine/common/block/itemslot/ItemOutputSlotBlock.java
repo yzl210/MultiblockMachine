@@ -1,9 +1,8 @@
 package cn.leomc.multiblockmachine.common.block.itemslot;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
-import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemOutputSlotBlockEntity;
-import cn.leomc.multiblockmachine.common.utils.Utils;
+import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
 import me.shedaniel.architectury.registry.MenuRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,14 +29,17 @@ import org.jetbrains.annotations.Nullable;
                  MenuRegistry.openExtendedMenu((ServerPlayer) player, (MenuProvider) blockEntity, packetBuffer -> packetBuffer.writeBlockPos(blockEntity.getBlockPos()));
              return InteractionResult.SUCCESS;
          } else {
-             MultiblockMachine.LOGGER.info(blockEntity.getClass().getName());
              throw new IllegalStateException("Block entity is not an instance of ItemOutputSlotBlockEntity!");
          }
+     }
+
+     public static ItemOutputSlotBlockEntity getBlockEntity() {
+        return (ItemOutputSlotBlockEntity) PlatformSpecific.getBlockEntity("ItemOutputSlot");
      }
 
      @Nullable
      @Override
      public BlockEntity newBlockEntity(BlockGetter blockGetter) {
-         return Utils.getBlockEntity("ItemOutputSlot");
+         return getBlockEntity();
      }
  }

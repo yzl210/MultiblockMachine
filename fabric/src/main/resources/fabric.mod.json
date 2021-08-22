@@ -3,16 +3,16 @@
   "id": "multiblockmachine",
   "version": "${version}",
   "name": "Multiblock Machine",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Multiblock Machine",
   "authors": [
     "6LeoMC"
   ],
   "contact_": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/yzl210/MultiblockMachine",
+    "sources": "https://github.com/yzl210/MultiblockMachine"
   },
   "license": "GNU GPL3",
-  "icon_": "assets/examplemod/icon.png",
+  "icon_": "assets/multiblockmachine/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

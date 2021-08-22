@@ -55,7 +55,7 @@ public class ControllerBlock extends Block implements EntityBlock {
                 if(((ControllerBlockEntity) blockEntity).isFormed())
                     MenuRegistry.openExtendedMenu((ServerPlayer) player, (MenuProvider) blockEntity, packetBuffer -> packetBuffer.writeBlockPos(blockEntity.getBlockPos()));
                 else
-                    ((ServerPlayer) player).sendMessage(new TranslatableComponent("text.multiblockmachine.notformed"), ChatType.SYSTEM, Util.NIL_UUID);
+                    ((ServerPlayer) player).sendMessage(new TranslatableComponent("text.multiblockmachine.not_formed"), ChatType.SYSTEM, Util.NIL_UUID);
             }
             return InteractionResult.SUCCESS;
         } else
