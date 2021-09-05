@@ -19,9 +19,6 @@ public class ItemRegistry {
 
     public static RegistrySupplier<Item> CONTROLLER = register("controller", () -> new BlockItem(BlockRegistry.CONTROLLER.get(), new Item.Properties().tab(ModRegistry.TAB)));
 
-    public static RegistrySupplier<Item> TEMP = register("temp", () -> new BlockItem(BlockRegistry.INSTRUCTION_BLOCK.get(), new Item.Properties().tab(ModRegistry.TAB)));
-
-
     public static RegistrySupplier<Item> ITEM_INPUT_SLOT = register("item_input_slot", () -> new BlockItem(BlockRegistry.ITEM_INPUT_SLOT.get(), new Item.Properties().tab(ModRegistry.TAB)));
 
     public static RegistrySupplier<Item> ITEM_OUTPUT_SLOT = register("item_output_slot", () -> new BlockItem(BlockRegistry.ITEM_OUTPUT_SLOT.get(), new Item.Properties().tab(ModRegistry.TAB)));

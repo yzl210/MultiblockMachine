@@ -1,19 +1,50 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "multiblockmachine:block/controller"
+    "facing=north,formed=false": {
+      "model": "multiblockmachine:block/controller/unformed"
     },
-    "facing=south": {
-      "model": "multiblockmachine:block/controller",
+    "facing=south,formed=false": {
+      "model": "multiblockmachine:block/controller/unformed",
       "y": 180
     },
-    "facing=west": {
-      "model": "multiblockmachine:block/controller",
+    "facing=west,formed=false": {
+      "model": "multiblockmachine:block/controller/unformed",
       "y": 270
     },
-    "facing=east": {
-      "model": "multiblockmachine:block/controller",
+    "facing=east,formed=false": {
+      "model": "multiblockmachine:block/controller/unformed",
       "y": 90
+    },
+    "facing=up,formed=false": {
+      "model": "multiblockmachine:block/controller/unformed",
+      "x": -90
+    },
+    "facing=down,formed=false": {
+      "model": "multiblockmachine:block/controller/unformed",
+      "x": 90
+    },
+    "facing=north,formed=true": {
+      "model": "multiblockmachine:block/controller/formed"
+    },
+    "facing=south,formed=true": {
+      "model": "multiblockmachine:block/controller/formed",
+      "y": 180
+    },
+    "facing=west,formed=true": {
+      "model": "multiblockmachine:block/controller/formed",
+      "y": 270
+    },
+    "facing=east,formed=true": {
+      "model": "multiblockmachine:block/controller/formed",
+      "y": 90
+    },
+    "facing=up,formed=true": {
+      "model": "multiblockmachine:block/controller/formed",
+      "x": -90
+    },
+    "facing=down,formed=true": {
+      "model": "multiblockmachine:block/controller/formed",
+      "x": 90
     }
   }
 }

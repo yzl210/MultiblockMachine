@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "multiblockmachine:block/fluid_input_slot"
+    }
+  }
+}

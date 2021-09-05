@@ -1,3 +1,3 @@
 {
-  "parent": "multiblockmachine:block/controller"
+  "parent": "multiblockmachine:block/controller/unformed"
 }

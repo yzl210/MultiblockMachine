@@ -6,7 +6,7 @@
     "up": "multiblockmachine:block/controller/side",
     "east": "multiblockmachine:block/controller/side",
     "west": "multiblockmachine:block/controller/side",
-    "north": "multiblockmachine:block/controller/front",
+    "north": "multiblockmachine:block/controller/front_unformed",
     "south": "multiblockmachine:block/controller/back"
   }
 }

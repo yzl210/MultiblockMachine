@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "multiblockmachine:block/energy_input_slot"
+    }
+  }
+}

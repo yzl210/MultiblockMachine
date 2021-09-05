@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "multiblockmachine:block/item_output_slot"
+    }
+  }
+}

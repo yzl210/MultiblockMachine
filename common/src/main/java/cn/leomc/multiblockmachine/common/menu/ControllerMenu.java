@@ -10,13 +10,13 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 public class ControllerMenu extends BaseMenu<ControllerBlockEntity> {
 
 
-    public ControllerMenu(ControllerBlockEntity tileEntity, Player player, Inventory playerInventory, int windowId) {
-        super(ContainerMenuRegistry.CONTROLLER.get(), tileEntity, player, playerInventory, windowId);
+    public ControllerMenu(ControllerBlockEntity blockEntity, Player player, Inventory playerInventory, int windowId) {
+        super(ContainerMenuRegistry.CONTROLLER.get(), blockEntity, player, playerInventory, windowId);
     }
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), player, BlockRegistry.CONTROLLER.get());
+        return blockEntity.isFormed() && stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), player, BlockRegistry.CONTROLLER.get());
     }
 
 }

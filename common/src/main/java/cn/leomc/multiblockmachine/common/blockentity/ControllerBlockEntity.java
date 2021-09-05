@@ -109,6 +109,7 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
                 structure = newStructure;
                 itemSlots.addAll(structure.getItemSlots());
                 energySlots.addAll(structure.getEnergySlots());
+                level.setBlockAndUpdate(worldPosition, getBlockState().setValue(ControllerBlock.FORMED, true));
                 itemInputSlots = new MultipleContainer(itemSlots.stream()
                         .filter(itemSlot -> itemSlot.getSlotType() == SlotType.INPUT)
                         .map(IItemSlot::getContainer)
@@ -141,6 +142,7 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
                 recipe = null;
                 loadRecipe = null;
                 status = MachineStatus.NOT_FORMED;
+                level.setBlockAndUpdate(worldPosition, getBlockState().setValue(ControllerBlock.FORMED, false));
             }
 
             if (loadRecipe != null) {
