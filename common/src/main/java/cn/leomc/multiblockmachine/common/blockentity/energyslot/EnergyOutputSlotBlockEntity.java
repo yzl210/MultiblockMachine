@@ -4,8 +4,7 @@ import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.api.DoubleLong;
 import cn.leomc.multiblockmachine.common.api.IEnergyHandler;
 import cn.leomc.multiblockmachine.common.api.SlotType;
-import cn.leomc.multiblockmachine.common.config.CommonConfig;
-import cn.leomc.multiblockmachine.common.config.Config;
+import cn.leomc.multiblockmachine.common.api.UpgradeType;
 import cn.leomc.multiblockmachine.common.registry.BlockEntityRegistry;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
 import net.minecraft.network.chat.Component;
@@ -29,6 +28,13 @@ public class EnergyOutputSlotBlockEntity extends EnergySlotBlockEntity {
 
     @Override
     public IEnergyHandler createEnergyHandler() {
-        return PlatformSpecific.createEnergyHandler(DoubleLong.of((double) Config.get(CommonConfig.ENERGY_OUTPUT_SLOT_CAPACITY)), DoubleLong.of(0), DoubleLong.of((double) Config.get(CommonConfig.ENERGY_OUTPUT_SLOT_EXTRACT)));
+        double capacity = MultiblockMachine.CONFIG.common.energy_output_slot.capacity;
+        double output = MultiblockMachine.CONFIG.common.energy_output_slot.output;
+        if(MultiblockMachine.CONFIG.common.upgrades.enable_capacity)
+            capacity *= upgrades.getMultiplier(UpgradeType.CAPACITY);
+        if(MultiblockMachine.CONFIG.common.upgrades.enable_speed)
+            output *= upgrades.getMultiplier(UpgradeType.SPEED);
+
+        return PlatformSpecific.createEnergyHandler(DoubleLong.of(capacity), DoubleLong.of(0), DoubleLong.of(output));
     }
 }

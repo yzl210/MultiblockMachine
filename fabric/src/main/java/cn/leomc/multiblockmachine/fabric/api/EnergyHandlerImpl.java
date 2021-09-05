@@ -22,13 +22,13 @@ public class EnergyHandlerImpl implements IEnergyHandler, EnergyStorage {
 
 
     @Override
-    public DoubleLong receiveEnergy(DoubleLong maxReceive, boolean simulate) {
+    public DoubleLong receiveEnergy(DoubleLong maxReceive, boolean simulate, boolean force) {
         EnergyHandler handler = simulate ? Energy.of(this).simulate() : this.handler;
         return DoubleLong.of(handler.insert(maxReceive.doubleValue));
     }
 
     @Override
-    public DoubleLong extractEnergy(DoubleLong maxExtract, boolean simulate) {
+    public DoubleLong extractEnergy(DoubleLong maxExtract, boolean simulate, boolean force) {
         EnergyHandler handler = simulate ? Energy.of(this).simulate() : this.handler;
         return DoubleLong.of(handler.extract(maxExtract.doubleValue));
     }
@@ -75,12 +75,12 @@ public class EnergyHandlerImpl implements IEnergyHandler, EnergyStorage {
 
     @Override
     public double getMaxInput(EnergySide side) {
-        return maxReceive;
+        return Double.MAX_VALUE;
     }
 
     @Override
     public double getMaxOutput(EnergySide side) {
-        return maxExtract;
+        return Double.MAX_VALUE;
     }
 
     @Override

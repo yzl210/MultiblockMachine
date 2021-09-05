@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class PlatformSpecific {
 
+
     @ExpectPlatform
     public static IEnergyHandler createEnergyHandler(DoubleLong capacity, DoubleLong maxReceive, DoubleLong maxExtract) {
         throw new AssertionError();

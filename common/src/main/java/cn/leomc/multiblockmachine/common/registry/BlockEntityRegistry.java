@@ -8,6 +8,7 @@ import cn.leomc.multiblockmachine.common.block.fluidslot.FluidOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.blockentity.ControllerBlockEntity;
+import cn.leomc.multiblockmachine.common.blockentity.InstructionBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.energyslot.EnergyInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.energyslot.EnergyOutputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.fluidslot.FluidInputSlotBlockEntity;
@@ -27,6 +28,9 @@ public class BlockEntityRegistry {
 
     public static final RegistrySupplier<BlockEntityType<ControllerBlockEntity>> CONTROLLER = BLOCK_ENTITIES.register("controller",
             () -> BlockEntityType.Builder.of(ControllerBlockEntity::new, BlockRegistry.CONTROLLER.get()).build(null));
+
+    public static final RegistrySupplier<BlockEntityType<InstructionBlockEntity>> INSTRUCTION_BLOCK = BLOCK_ENTITIES.register("instruction_block",
+            () -> BlockEntityType.Builder.of(InstructionBlockEntity::new, BlockRegistry.INSTRUCTION_BLOCK.get()).build(null));
 
     public static final RegistrySupplier<BlockEntityType<ItemInputSlotBlockEntity>> ITEM_INPUT_SLOT = BLOCK_ENTITIES.register("item_input_slot",
             () -> BlockEntityType.Builder.of(ItemInputSlotBlock::getBlockEntity, BlockRegistry.ITEM_INPUT_SLOT.get()).build(null));

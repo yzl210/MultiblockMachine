@@ -3,9 +3,8 @@ package cn.leomc.multiblockmachine.common.blockentity.energyslot;
 import cn.leomc.multiblockmachine.common.api.DoubleLong;
 import cn.leomc.multiblockmachine.common.api.IEnergyHandler;
 import cn.leomc.multiblockmachine.common.api.IEnergySlot;
-import cn.leomc.multiblockmachine.common.api.SlotType;
+import cn.leomc.multiblockmachine.common.blockentity.UpgradableBlockEntity;
 import cn.leomc.multiblockmachine.common.menu.energyslot.EnergySlotMenu;
-import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
 import me.shedaniel.architectury.extensions.BlockEntityExtension;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,7 +19,7 @@ import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class EnergySlotBlockEntity extends BlockEntity implements MenuProvider, IEnergySlot, BlockEntityExtension, TickableBlockEntity {
+public abstract class EnergySlotBlockEntity extends UpgradableBlockEntity implements MenuProvider, IEnergySlot, BlockEntityExtension, TickableBlockEntity {
 
     protected IEnergyHandler handler;
 

@@ -1,10 +1,10 @@
 package cn.leomc.multiblockmachine.common.blockentity.fluidslot;
 
-import cn.leomc.multiblockmachine.common.api.*;
+import cn.leomc.multiblockmachine.common.api.FluidHandler;
+import cn.leomc.multiblockmachine.common.api.IFluidSlot;
+import cn.leomc.multiblockmachine.common.blockentity.UpgradableBlockEntity;
 import cn.leomc.multiblockmachine.common.menu.fluidslot.FluidSlotMenu;
-import cn.leomc.multiblockmachine.common.utils.Utils;
 import me.shedaniel.architectury.extensions.BlockEntityExtension;
-import me.shedaniel.architectury.fluid.FluidStack;
 import me.shedaniel.architectury.utils.Fraction;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FluidSlotBlockEntity extends BlockEntity implements MenuProvider, IFluidSlot, BlockEntityExtension, TickableBlockEntity {
+public abstract class FluidSlotBlockEntity extends UpgradableBlockEntity implements MenuProvider, IFluidSlot, BlockEntityExtension, TickableBlockEntity {
 
     protected FluidHandler fluid;
 
@@ -37,7 +37,7 @@ public abstract class FluidSlotBlockEntity extends BlockEntity implements MenuPr
         syncData();
     }
 
-    public FluidHandler getFluid(){
+    public FluidHandler getFluid() {
         return fluid;
     }
 

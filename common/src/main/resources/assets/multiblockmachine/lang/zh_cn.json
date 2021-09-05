@@ -1,17 +1,38 @@
 {
-  "block.multiblockmachine.controller":"控制器",
-
+  "block.multiblockmachine.controller": "控制器",
+  "block.multiblockmachine.instruction_block": "右键查看",
   "block.multiblockmachine.item_input_slot": "物品输入槽",
   "block.multiblockmachine.item_output_slot": "物品输出槽",
   "block.multiblockmachine.energy_input_slot": "能量输入槽",
   "block.multiblockmachine.energy_output_slot": "能量输出槽",
-
+  "item.multiblockmachine.machine_item": "多方块机器",
   "container.multiblockmachine.item_input_slot": "物品输入槽",
   "container.multiblockmachine.item_output_slot": "物品输出槽",
   "container.multiblockmachine.energy_input_slot": "能量输入槽",
   "container.multiblockmachine.energy_output_slot": "能量输出槽",
-
   "text.multiblockmachine.not_formed": "未检测到机器，请检查结构是否完整以及控制器的方向是否正确！",
-
+  "text.multiblockmachine.fluid_tank": "%s: %s mB",
+  "text.multiblockmachine.recipe": "多方块机器",
+  "text.multiblockmachine.controller.progress": "进度: %s",
+  "text.multiblockmachine.controller.status": "状态: %s",
+  "text.multiblockmachine.controller.status.working": "工作中",
+  "text.multiblockmachine.controller.status.no_input": "未找到配方",
+  "text.multiblockmachine.controller.status.output_full": "输出已满",
+  "text.multiblockmachine.controller.status.no_energy": "能量不足",
+  "text.multiblockmachine.controller.status.not_formed": "你不应该看到这个！请报告给我！",
+  "text.multiblockmachine.accept": "接受以下任意(鼠标悬浮查看标签): %s",
+  "text.multiblockmachine.accept.tag": "标签: %s",
+  "text.multiblockmachine.accept.block": "方块: %s",
+  "text.autoconfig.multiblockmachine.title": "多方块机器配置",
+  "text.autoconfig.multiblockmachine.category.common": "常规",
+  "text.autoconfig.multiblockmachine.option.common.controller": "控制器",
+  "text.autoconfig.multiblockmachine.option.common.controller.interval": "控制器执行间隔",
+  "text.autoconfig.multiblockmachine.option.common.energy_input_slot": "能量输入槽",
+  "text.autoconfig.multiblockmachine.option.common.energy_input_slot.capacity": "能量输入槽容量",
+  "text.autoconfig.multiblockmachine.option.common.energy_input_slot.input": "能量输入槽输入速率",
+  "text.autoconfig.multiblockmachine.option.common.energy_output_slot": "能量输出槽",
+  "text.autoconfig.multiblockmachine.option.common.energy_output_slot.capacity": "能量输出槽容量",
+  "text.autoconfig.multiblockmachine.option.common.energy_output_slot.output": "能量输出槽输出速率",
+  "text.autoconfig.multiblockmachine.category.client": "客户端",
   "itemGroup.multiblockmachine.default": "多方块机器"
 }

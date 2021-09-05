@@ -5,9 +5,9 @@ import me.shedaniel.architectury.fluid.FluidStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
-public class RecipeResult {
+public class RecipeIngredient {
 
-    public static final RecipeResult EMPTY = new RecipeResult(ResultType.EMPTY);
+    public static final RecipeIngredient EMPTY = new RecipeIngredient(ResultType.EMPTY);
 
     protected ItemStack item;
     protected DoubleLong energy;
@@ -15,41 +15,40 @@ public class RecipeResult {
 
     protected ResultType type;
 
-    private RecipeResult(ResultType type){
+    private RecipeIngredient(ResultType type) {
         this.type = type;
     }
 
 
-
-    public static RecipeResult of(DoubleLong energy){
-        RecipeResult result = new RecipeResult(ResultType.ENERGY);
+    public static RecipeIngredient of(DoubleLong energy) {
+        RecipeIngredient result = new RecipeIngredient(ResultType.ENERGY);
         result.energy = DoubleLong.of(energy);
         return result;
     }
 
-    public static RecipeResult of(ItemStack item){
-        RecipeResult result = new RecipeResult(ResultType.ITEM);
+    public static RecipeIngredient of(ItemStack item) {
+        RecipeIngredient result = new RecipeIngredient(ResultType.ITEM);
         result.item = item.copy();
         return result;
     }
 
-    public static RecipeResult of(FluidStack fluid){
-        RecipeResult result = new RecipeResult(ResultType.FLUID);
+    public static RecipeIngredient of(FluidStack fluid) {
+        RecipeIngredient result = new RecipeIngredient(ResultType.FLUID);
         result.fluid = fluid;
         return result;
     }
 
-    public static RecipeResult of(CompoundTag tag){
+    public static RecipeIngredient of(CompoundTag tag) {
         ResultType type = ResultType.valueOf(tag.getString("type"));
-        switch (type){
+        switch (type) {
             case ITEM:
-                return RecipeResult.of(ItemStack.of(tag.getCompound("item")));
+                return RecipeIngredient.of(ItemStack.of(tag.getCompound("item")));
             case ENERGY:
-                return RecipeResult.of(DoubleLong.of((tag.getDouble("energy"))));
+                return RecipeIngredient.of(DoubleLong.of((tag.getDouble("energy"))));
             case FLUID:
-                return RecipeResult.of(FluidStack.read(tag.getCompound("fluid")));
+                return RecipeIngredient.of(FluidStack.read(tag.getCompound("fluid")));
         }
-        return RecipeResult.EMPTY;
+        return RecipeIngredient.EMPTY;
     }
 
 
@@ -70,9 +69,9 @@ public class RecipeResult {
     }
 
 
-    public CompoundTag save(CompoundTag tag){
+    public CompoundTag save(CompoundTag tag) {
         tag.putString("type", type.toString());
-        switch (type){
+        switch (type) {
             case ITEM:
                 tag.put("item", item.save(new CompoundTag()));
                 break;
@@ -85,7 +84,7 @@ public class RecipeResult {
         return tag;
     }
 
-    public enum ResultType{
+    public enum ResultType {
         ITEM,
         ENERGY,
         FLUID,

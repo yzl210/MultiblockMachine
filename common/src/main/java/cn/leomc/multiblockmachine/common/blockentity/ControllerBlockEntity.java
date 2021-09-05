@@ -1,26 +1,38 @@
 package cn.leomc.multiblockmachine.common.blockentity;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
-import cn.leomc.multiblockmachine.common.api.*;
+import cn.leomc.multiblockmachine.common.api.DoubleLong;
+import cn.leomc.multiblockmachine.common.api.IEnergySlot;
+import cn.leomc.multiblockmachine.common.api.IFluidSlot;
+import cn.leomc.multiblockmachine.common.api.IItemSlot;
+import cn.leomc.multiblockmachine.common.api.IngredientExtension;
+import cn.leomc.multiblockmachine.common.api.MachineStatus;
+import cn.leomc.multiblockmachine.common.api.MultipleContainer;
+import cn.leomc.multiblockmachine.common.api.MultipleEnergyHandler;
+import cn.leomc.multiblockmachine.common.api.MultipleFluidHandler;
+import cn.leomc.multiblockmachine.common.api.SlotType;
 import cn.leomc.multiblockmachine.common.api.multiblock.MultiblockStructure;
 import cn.leomc.multiblockmachine.common.api.multiblock.MultiblockStructures;
 import cn.leomc.multiblockmachine.common.api.recipe.MachineRecipe;
 import cn.leomc.multiblockmachine.common.api.recipe.MachineRecipeType;
-import cn.leomc.multiblockmachine.common.api.recipe.RecipeResult;
+import cn.leomc.multiblockmachine.common.api.recipe.RecipeIngredient;
 import cn.leomc.multiblockmachine.common.block.ControllerBlock;
 import cn.leomc.multiblockmachine.common.menu.ControllerMenu;
 import cn.leomc.multiblockmachine.common.registry.BlockEntityRegistry;
+import com.mojang.datafixers.util.Pair;
 import me.shedaniel.architectury.extensions.BlockEntityExtension;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +47,8 @@ import java.util.stream.Collectors;
 
 public class ControllerBlockEntity extends BlockEntity implements TickableBlockEntity, MenuProvider, BlockEntityExtension {
 
+    protected int interval = -100;
+
     protected boolean formed = false;
 
     protected MultiblockStructure structure;
@@ -42,6 +56,8 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
     protected MachineRecipe recipe;
 
     protected boolean working;
+
+    protected String loadRecipe;
 
     protected double progress;
 
@@ -77,75 +93,104 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
         if (level.isClientSide)
             return;
 
-        Direction direction = getBlockState().getValue(ControllerBlock.FACING);
+        if(interval <= 0 && interval != -100)
+            interval = MultiblockMachine.CONFIG.common.controller.interval;
+        else
+            interval--;
 
-        MultiblockStructure newStructure = MultiblockStructures.getFormedStructure(level, worldPosition, direction);
+        if(interval <= 0) {
+            Direction direction = getBlockState().getValue(ControllerBlock.FACING);
 
-        if (!formed && newStructure != null) {
-            formed = true;
-            status = MachineStatus.NO_INPUT;
-            structure = newStructure;
-            itemSlots.addAll(structure.getItemSlots());
-            energySlots.addAll(structure.getEnergySlots());
-            itemInputSlots = new MultipleContainer(itemSlots.stream()
-                    .filter(itemSlot -> itemSlot.getSlotType() == SlotType.INPUT)
-                    .map(IItemSlot::getContainer)
-                    .collect(Collectors.toList()));
-            itemOutputSlots = new MultipleContainer(itemSlots.stream()
-                    .filter(itemSlot -> itemSlot.getSlotType() == SlotType.OUTPUT)
-                    .map(IItemSlot::getContainer)
-                    .collect(Collectors.toList()));
-            energyInputSlots = new MultipleEnergyHandler(energySlots.stream()
-                    .filter(energySlot -> energySlot.getSlotType() == SlotType.INPUT)
-                    .map(IEnergySlot::getEnergyHandler)
-                    .collect(Collectors.toList()));
-            energyOutputSlots = new MultipleEnergyHandler(energySlots.stream()
-                    .filter(energySlot -> energySlot.getSlotType() == SlotType.OUTPUT)
-                    .map(IEnergySlot::getEnergyHandler)
-                    .collect(Collectors.toList()));
+            MultiblockStructure newStructure = MultiblockStructures.getFormedStructure(level, worldPosition, direction);
 
+            if (!formed && newStructure != null) {
+                formed = true;
+                status = MachineStatus.NO_INPUT;
+                structure = newStructure;
+                itemSlots.addAll(structure.getItemSlots());
+                energySlots.addAll(structure.getEnergySlots());
+                itemInputSlots = new MultipleContainer(itemSlots.stream()
+                        .filter(itemSlot -> itemSlot.getSlotType() == SlotType.INPUT)
+                        .map(IItemSlot::getContainer)
+                        .collect(Collectors.toList()));
+                itemOutputSlots = new MultipleContainer(itemSlots.stream()
+                        .filter(itemSlot -> itemSlot.getSlotType() == SlotType.OUTPUT)
+                        .map(IItemSlot::getContainer)
+                        .collect(Collectors.toList()));
+                energyInputSlots = new MultipleEnergyHandler(energySlots.stream()
+                        .filter(energySlot -> energySlot.getSlotType() == SlotType.INPUT)
+                        .map(IEnergySlot::getEnergyHandler)
+                        .collect(Collectors.toList()));
+                energyOutputSlots = new MultipleEnergyHandler(energySlots.stream()
+                        .filter(energySlot -> energySlot.getSlotType() == SlotType.OUTPUT)
+                        .map(IEnergySlot::getEnergyHandler)
+                        .collect(Collectors.toList()));
+
+            }
+
+            if (formed && newStructure != structure) {
+                formed = false;
+                structure = null;
+                itemSlots.clear();
+                itemInputSlots = null;
+                itemOutputSlots = null;
+                energySlots.clear();
+                energyInputSlots = null;
+                energyOutputSlots = null;
+                working = false;
+                recipe = null;
+                loadRecipe = null;
+                status = MachineStatus.NOT_FORMED;
+            }
+
+            if (loadRecipe != null) {
+                List<MachineRecipe> list = level.getRecipeManager().getAllRecipesFor(MachineRecipeType.INSTANCE).stream()
+                        .filter(machineRecipe -> machineRecipe.getId().equals(new ResourceLocation(loadRecipe)))
+                        .collect(Collectors.toList());
+                this.recipe = list.size() < 1 ? null : list.get(0);
+                loadRecipe = null;
+            }
         }
-
-        if (formed && newStructure != structure) {
-            formed = false;
-            structure = null;
-            itemSlots.clear();
-            itemInputSlots = null;
-            itemOutputSlots = null;
-            energySlots.clear();
-            energyInputSlots = null;
-            energyOutputSlots = null;
-            working = false;
-            recipe = null;
-            status = MachineStatus.NOT_FORMED;
-        }
-
 
         if (formed && structure != null && itemInputSlots != null && itemOutputSlots != null) {
 
-            boolean canAdd = true;
-
-
-            if (!working && canAdd) {
+            if (!working && interval <= 0) {
                 Optional<MachineRecipe> recipeOptional = level.getRecipeManager().getRecipeFor(MachineRecipeType.INSTANCE, itemInputSlots, level);
-                if (!recipeOptional.isPresent())
+                if (!recipeOptional.isPresent()) {
+                    status = MachineStatus.NO_INPUT;
                     return;
+                }
                 this.recipe = recipeOptional.get();
-                for (ItemStack itemStack : recipe.getInputs()) {
-                    ItemStack itemStack1 = itemInputSlots.hasItem(itemStack);
-                    if (itemStack1.isEmpty()) {
+
+                if (!itemOutputSlots.canAddItems(recipe.getItemResults())) {
+                    recipe = null;
+                    status = MachineStatus.OUTPUT_FULL;
+                    return;
+                }
+                for (Pair<Ingredient, Integer> pair : recipe.getInputs()) {
+                    int removed = 0;
+                    boolean enough = false;
+                    for (ItemStack item : ((IngredientExtension) (Object) pair.getFirst()).getItemsServer()) {
+                        removed += itemInputSlots.removeItemType(item.getItem(), pair.getSecond() - removed).getCount();
+                        if (removed >= pair.getSecond()) {
+                            enough = true;
+                            break;
+                        }
+                    }
+                    if (!enough) {
+                        status = MachineStatus.NO_INPUT;
                         recipe = null;
                         return;
                     }
                 }
-                for (ItemStack itemStack : recipe.getInputs()) {
-                    itemInputSlots.removeItemType(itemStack.getItem(), itemStack.getCount());
-                    status = MachineStatus.WORKING;
-                    working = true;
-                }
+
+                status = MachineStatus.WORKING;
+                working = true;
             }
+            if (recipe == null)
+                return;
             if (recipe.requireEnergy()) {
-                counter.add(energyInputSlots.extractEnergy(recipe.getEnergyMaxInput(), false));
+                counter.add(energyInputSlots.extractEnergy(recipe.getEnergyMaxInput(), false, true));
                 progress = new BigDecimal(counter.doubleValue / recipe.getEnergy().doubleValue * 100).setScale(1, RoundingMode.HALF_UP).doubleValue();
             } else {
                 counter.add(1);
@@ -153,14 +198,14 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
             }
             if (recipe.requireEnergy() ? counter.doubleValue > recipe.getEnergy().doubleValue : counter.doubleValue > recipe.getTime()) {
                 recipe.getResults().stream()
-                        .filter(result -> result.getType() == RecipeResult.ResultType.ITEM)
+                        .filter(result -> result.getType() == RecipeIngredient.ResultType.ITEM)
                         .forEach(result -> itemOutputSlots.addItem(result.getItem()));
-                recipe.getResults().stream()
-                        .filter(result -> result.getType() == RecipeResult.ResultType.ENERGY)
-                        .forEach(result -> energyOutputSlots.receiveEnergy(result.getEnergy(), false));
-                recipe.getResults().stream()
+                energyOutputSlots.receiveEnergy(recipe.getTotalOutputEnergy(), false, true);
+              /*  recipe.getResults().stream()
                         .filter(result -> result.getType() == RecipeResult.ResultType.FLUID)
                         .forEach(result -> fluidOutputSlots);
+
+               */
                 recipe = null;
                 working = false;
                 counter = DoubleLong.of(0);
@@ -169,6 +214,7 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
                     status = MachineStatus.NO_INPUT;
             }
         }
+
         syncData();
     }
 
@@ -189,22 +235,18 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
     @Override
     public void load(BlockState state, CompoundTag tag) {
         super.load(state, tag);
-       // String id = tag.getString("structure");
+        // String id = tag.getString("structure");
         //if (!id.isEmpty()) {
-         //   MultiblockStructure structure = MultiblockStructures.getStructure(new ResourceLocation(id));
-           // if (structure != null) {
-                //this.structure = structure;
-                //this.formed = true;
+        //   MultiblockStructure structure = MultiblockStructures.getStructure(new ResourceLocation(id));
+        // if (structure != null) {
+        //this.structure = structure;
+        //this.formed = true;
         this.counter = DoubleLong.of(tag.getDouble("counter"));
         this.working = tag.getBoolean("working");
-        String recipe = tag.getString("recipe");
-        List<MachineRecipe> list = level.getRecipeManager().getAllRecipesFor(MachineRecipeType.INSTANCE).stream()
-                .filter(machineRecipe -> machineRecipe.getId().equals(new ResourceLocation(recipe)))
-                .collect(Collectors.toList());
-
-        this.recipe = list.size() < 1 ? null : list.get(0);
-            //}
-       // }
+        if (tag.contains("recipe"))
+            this.loadRecipe = tag.getString("recipe");
+        //}
+        // }
         status = MachineStatus.valueOf(tag.getString("status"));
     }
 
@@ -213,9 +255,13 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
         return structure;
     }
 
+    public MachineStatus getStatus() {
+        return status;
+    }
+
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("multiblockmachine." + structure.getId().getNamespace() + "." + structure.getId().getPath());
+        return MultiblockStructures.getStructureName(structure.getId());
     }
 
     @Nullable
@@ -225,13 +271,16 @@ public class ControllerBlockEntity extends BlockEntity implements TickableBlockE
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public void loadClientData(BlockState state, CompoundTag tag) {
         progress = tag.getDouble("progress");
+        status = MachineStatus.valueOf(tag.getString("status"));
     }
 
     @Override
     public CompoundTag saveClientData(CompoundTag tag) {
         tag.putDouble("progress", progress);
+        tag.putString("status", status.name());
         return tag;
     }
 

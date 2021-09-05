@@ -2,6 +2,7 @@ package cn.leomc.multiblockmachine.common.registry;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.block.ControllerBlock;
+import cn.leomc.multiblockmachine.common.block.InstructionBlock;
 import cn.leomc.multiblockmachine.common.block.energyslot.EnergyInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.energyslot.EnergyOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.fluidslot.FluidInputSlotBlock;
@@ -21,6 +22,8 @@ public class BlockRegistry {
 
     public static final RegistrySupplier<Block> CONTROLLER = register("controller", ControllerBlock::new);
 
+    public static final RegistrySupplier<Block> INSTRUCTION_BLOCK = register("instruction_block", InstructionBlock::new);
+
     public static final RegistrySupplier<Block> ITEM_INPUT_SLOT = register("item_input_slot", ItemInputSlotBlock::new);
 
     public static final RegistrySupplier<Block> ITEM_OUTPUT_SLOT = register("item_output_slot", ItemOutputSlotBlock::new);
@@ -32,8 +35,6 @@ public class BlockRegistry {
     public static final RegistrySupplier<Block> FLUID_INPUT_SLOT = register("fluid_input_slot", FluidInputSlotBlock::new);
 
     public static final RegistrySupplier<Block> FLUID_OUTPUT_SLOT = register("fluid_output_slot", FluidOutputSlotBlock::new);
-
-
 
 
     public static void register() {

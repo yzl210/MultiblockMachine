@@ -47,9 +47,8 @@ public abstract class BaseScreen<C extends AbstractContainerMenu> extends Abstra
         blit(poseStack, relX, relY, 0, this.imageWidth, this.imageWidth, Textures.GENERIC_GUI.get());
         if (!slots.isEmpty()) {
             TextureAtlasSprite slot = Textures.SLOT_SMALL.get();
-            for (Pair<Integer, Integer> pair : slots) {
+            for (Pair<Integer, Integer> pair : slots)
                 blit(poseStack, leftPos + pair.getFirst(), topPos + pair.getSecond(), 1, slot.getWidth(), slot.getHeight(), slot);
-            }
         }
     }
 
@@ -61,9 +60,9 @@ public abstract class BaseScreen<C extends AbstractContainerMenu> extends Abstra
     }
 
 
-    protected void addSlot(int x, int y, int horAmount, int dx, int verAmount, int dy) {
-        for (int j = 0; j < verAmount; j++) {
-            addSlot(x, y, horAmount, dx);
+    protected void addSlot(int x, int y, int horizonal, int dx, int vertical, int dy) {
+        for (int j = 0; j < vertical; j++) {
+            addSlot(x, y, horizonal, dx);
             y += dy;
         }
     }

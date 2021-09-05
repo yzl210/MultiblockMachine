@@ -12,7 +12,7 @@ public class ModRegistry {
 
     public static final CreativeModeTab TAB = CreativeTabs.create(new ResourceLocation(MultiblockMachine.MODID, "default"), () -> new ItemStack(ItemRegistry.CONTROLLER.get()));
 
-    public static void register(){
+    public static void register() {
         BlockRegistry.register();
         ItemRegistry.register();
         BlockEntityRegistry.register();

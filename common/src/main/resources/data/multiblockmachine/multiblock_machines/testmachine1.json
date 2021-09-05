@@ -1,15 +1,53 @@
 {
-  "id": "test_datapack:test_machine1",
   "blocks": [
     {
-      "left": -1,
-      "up": 0,
-      "behind": 0,
+      "x": -1,
+      "y": 0,
+      "z": 0,
       "block": {
-        "id": "minecraft:stone",
-        "states": {
-          "lit": true
-        }
+        "tag": "multiblockmachine:item_slot"
+      }
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 0,
+      "block": {
+        "tag": "multiblockmachine:item_slot"
+      }
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 0,
+      "block":[
+        {"tag": "minecraft:wool"},
+        {"block": "minecraft:command_block"},
+        {"tag": "minecraft:leaves"}
+      ]
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "block": {
+        "tag": "multiblockmachine:item_slot"
+      }
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "block": {
+        "tag": "multiblockmachine:energy_slot"
+      }
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "block": {
+        "tag": "multiblockmachine:energy_slot"
       }
     }
   ]

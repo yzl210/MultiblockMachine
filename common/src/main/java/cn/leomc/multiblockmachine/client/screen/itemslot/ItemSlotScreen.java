@@ -13,6 +13,6 @@ public class ItemSlotScreen extends BaseScreen<ItemSlotMenu> {
     @Override
     protected void init() {
         super.init();
-        addSlot(40,50, 2, 18);
+        addSlot(40, 50, 2, 18);
     }
 }

@@ -1,6 +1,7 @@
 package cn.leomc.multiblockmachine.common.blockentity.itemslot;
 
 import cn.leomc.multiblockmachine.common.api.IItemSlot;
+import cn.leomc.multiblockmachine.common.blockentity.UpgradableBlockEntity;
 import cn.leomc.multiblockmachine.common.menu.itemslot.ItemSlotMenu;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
@@ -10,12 +11,11 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ItemSlotBlockEntity extends BlockEntity implements MenuProvider, IItemSlot {
+public abstract class ItemSlotBlockEntity extends UpgradableBlockEntity implements MenuProvider, IItemSlot {
 
     protected SimpleContainer container;
 

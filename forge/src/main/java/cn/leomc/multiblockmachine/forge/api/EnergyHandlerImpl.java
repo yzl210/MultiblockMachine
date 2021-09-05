@@ -10,6 +10,7 @@ public class EnergyHandlerImpl implements IEnergyHandler, IEnergyStorage {
     private long capacity;
     private long maxReceive;
     private long maxExtract;
+
     public EnergyHandlerImpl(DoubleLong capacity, DoubleLong maxReceive, DoubleLong maxExtract) {
         this.energy = 0;
         this.capacity = capacity.longValue;
@@ -18,22 +19,22 @@ public class EnergyHandlerImpl implements IEnergyHandler, IEnergyStorage {
     }
 
     @Override
-    public DoubleLong receiveEnergy(DoubleLong maxReceive, boolean simulate) {
-        if (!canReceive())
+    public DoubleLong receiveEnergy(DoubleLong maxReceive, boolean simulate, boolean force) {
+        if (!force && !canReceive())
             return DoubleLong.of(0);
 
-        long energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive.longValue));
+        long energyReceived = Math.min(capacity - energy, force ? maxReceive.longValue : Math.min(this.maxReceive, maxReceive.longValue));
         if (!simulate)
             energy += energyReceived;
         return DoubleLong.of(energyReceived);
     }
 
     @Override
-    public DoubleLong extractEnergy(DoubleLong maxExtract, boolean simulate) {
-        if (!canExtract())
+    public DoubleLong extractEnergy(DoubleLong maxExtract, boolean simulate, boolean force) {
+        if (!force && !canExtract())
             return DoubleLong.of(0);
 
-        long energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract.longValue));
+        long energyExtracted = Math.min(energy, force ? maxExtract.longValue : Math.min(this.maxExtract, maxExtract.longValue));
         if (!simulate)
             energy -= energyExtracted;
         return DoubleLong.of(energyExtracted);

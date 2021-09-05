@@ -28,7 +28,7 @@ public class ForgeEnergyOutputSlotBlockEntity extends EnergyOutputSlotBlockEntit
                 BlockEntity entity = level.getBlockEntity(worldPosition.relative(direction));
                 if(entity != null) {
                     LazyOptional<IEnergyStorage> energyStorage = entity.getCapability(CapabilityEnergy.ENERGY);
-                    energyStorage.ifPresent(e -> e.receiveEnergy((int) handler.extractEnergy(DoubleLong.of(Long.MAX_VALUE), false).longValue, false));
+                    energyStorage.ifPresent(e -> e.receiveEnergy((int) handler.extractEnergy(DoubleLong.of(Integer.MAX_VALUE), false, false).longValue, false));
                 }
             }
     }

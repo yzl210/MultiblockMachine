@@ -37,7 +37,7 @@ public class FabricEnergyInputSlotBlockEntity extends EnergyInputSlotBlockEntity
 
     @Override
     public double getMaxOutput(EnergySide side) {
-        return energyHandler.getMaxOutput();
+        return 0;
     }
 
     @Override

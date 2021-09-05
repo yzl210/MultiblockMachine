@@ -1,6 +1,7 @@
 package cn.leomc.multiblockmachine.common.registry;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
+import cn.leomc.multiblockmachine.common.item.MachineItem;
 import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 import net.minecraft.core.Registry;
@@ -14,7 +15,12 @@ public class ItemRegistry {
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MultiblockMachine.MODID, Registry.ITEM_REGISTRY);
 
 
+    public static RegistrySupplier<Item> MACHINE_ITEM = register("machine_item", MachineItem::new);
+
     public static RegistrySupplier<Item> CONTROLLER = register("controller", () -> new BlockItem(BlockRegistry.CONTROLLER.get(), new Item.Properties().tab(ModRegistry.TAB)));
+
+    public static RegistrySupplier<Item> TEMP = register("temp", () -> new BlockItem(BlockRegistry.INSTRUCTION_BLOCK.get(), new Item.Properties().tab(ModRegistry.TAB)));
+
 
     public static RegistrySupplier<Item> ITEM_INPUT_SLOT = register("item_input_slot", () -> new BlockItem(BlockRegistry.ITEM_INPUT_SLOT.get(), new Item.Properties().tab(ModRegistry.TAB)));
 
@@ -27,7 +33,6 @@ public class ItemRegistry {
     public static RegistrySupplier<Item> FLUID_INPUT_SLOT = register("fluid_input_slot", () -> new BlockItem(BlockRegistry.FLUID_INPUT_SLOT.get(), new Item.Properties().tab(ModRegistry.TAB)));
 
     public static RegistrySupplier<Item> FLUID_OUTPUT_SLOT = register("fluid_output_slot", () -> new BlockItem(BlockRegistry.FLUID_OUTPUT_SLOT.get(), new Item.Properties().tab(ModRegistry.TAB)));
-
 
 
     public static void register() {

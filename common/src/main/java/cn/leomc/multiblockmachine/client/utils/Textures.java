@@ -22,13 +22,16 @@ public class Textures {
 
     public static Supplier<TextureAtlasSprite> SLOT_SMALL = register("gui/slot_small");
 
+    public static Supplier<TextureAtlasSprite> ENERGY_BAR_FULL = register("gui/energy_bar_full");
+
+    public static Supplier<TextureAtlasSprite> ARROW_DOWN = register("gui/arrow_down");
+
+
     //public static Supplier<TextureAtlasSprite> HORIZONTAL_FLUID_TANK = register("gui/horizontal_fluid_tank");
 
     //public static Supplier<TextureAtlasSprite> VERTICAL_FLUID_TANK = register("gui/vertical_fluid_tank");
 
     //public static Supplier<TextureAtlasSprite> TEXTFIELD = register("gui/textfield");
-
-
 
 
     public static Supplier<TextureAtlasSprite> register(String file) {

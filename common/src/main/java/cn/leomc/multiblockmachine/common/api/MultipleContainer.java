@@ -3,6 +3,7 @@ package cn.leomc.multiblockmachine.common.api;
 import com.google.common.collect.Lists;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +21,19 @@ public class MultipleContainer implements Container {
 
     public MultipleContainer(List<Container> containers) {
         this.containers = containers;
+    }
+
+    public static boolean canAddItem(ItemStack stack, Container container) {
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            ItemStack itemStack = container.getItem(i);
+            if (itemStack.isEmpty() || (isSameItem(itemStack, stack) && (itemStack.getMaxStackSize() - itemStack.getCount() >= stack.getCount())))
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean isSameItem(ItemStack itemStack, ItemStack itemStack2) {
+        return itemStack.getItem() == itemStack2.getItem() && ItemStack.tagMatches(itemStack, itemStack2);
     }
 
     @Override
@@ -148,16 +162,26 @@ public class MultipleContainer implements Container {
         return itemStack;
     }
 
-
     public boolean canAddItem(ItemStack stack) {
         for (int i = 0; i < getContainerSize(); i++) {
             ItemStack itemStack = getItem(i);
-            if (itemStack.isEmpty() || isSameItem(itemStack, stack) && itemStack.getCount() < itemStack.getMaxStackSize())
+            if (itemStack.isEmpty() || (isSameItem(itemStack, stack) && (itemStack.getMaxStackSize() - itemStack.getCount() >= stack.getCount())))
                 return true;
         }
         return false;
     }
 
+    public boolean canAddItems(List<ItemStack> stacks) {
+        SimpleContainer container = new SimpleContainer(getContainerSize());
+        for (int i = 0; i < getContainerSize(); i++)
+            container.addItem(getItem(i).copy());
+
+        for (ItemStack stack : stacks)
+            if (container.addItem(stack.copy()) != ItemStack.EMPTY)
+                return false;
+
+        return true;
+    }
 
     private void moveItemToEmptySlots(ItemStack stack) {
         for (int i = 0; i < getContainerSize(); ++i) {
@@ -176,7 +200,7 @@ public class MultipleContainer implements Container {
             for (Container container : containers)
                 if (index < container.getContainerSize()) {
                     ItemStack itemStack = getItem(i);
-                    if (this.isSameItem(itemStack, stack)) {
+                    if (isSameItem(itemStack, stack)) {
                         moveItemsBetweenStacks(stack, itemStack);
                         if (stack.isEmpty())
                             return;
@@ -185,10 +209,6 @@ public class MultipleContainer implements Container {
                 } else
                     index -= container.getContainerSize();
         }
-    }
-
-    private boolean isSameItem(ItemStack itemStack, ItemStack itemStack2) {
-        return itemStack.getItem() == itemStack2.getItem() && ItemStack.tagMatches(itemStack, itemStack2);
     }
 
     private void moveItemsBetweenStacks(ItemStack itemStack, ItemStack itemStack2) {

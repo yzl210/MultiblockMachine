@@ -38,7 +38,7 @@ public class ControllerBlock extends Block implements EntityBlock {
                 BlockProperties.of(Material.METAL)
                         .tool(ToolType.PICKAXE, 2)
                         .requiresCorrectToolForDrops()
-                        .strength(5, 6)
+                        .strength(4, 5)
                         .sound(SoundType.METAL)
         );
     }
@@ -52,7 +52,7 @@ public class ControllerBlock extends Block implements EntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof ControllerBlockEntity) {
             if (player instanceof ServerPlayer) {
-                if(((ControllerBlockEntity) blockEntity).isFormed())
+                if (((ControllerBlockEntity) blockEntity).isFormed())
                     MenuRegistry.openExtendedMenu((ServerPlayer) player, (MenuProvider) blockEntity, packetBuffer -> packetBuffer.writeBlockPos(blockEntity.getBlockPos()));
                 else
                     ((ServerPlayer) player).sendMessage(new TranslatableComponent("text.multiblockmachine.not_formed"), ChatType.SYSTEM, Util.NIL_UUID);

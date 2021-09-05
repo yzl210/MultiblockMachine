@@ -22,9 +22,10 @@ public class FabricEnergyOutputSlotBlockEntity extends EnergyOutputSlotBlockEnti
             for (Direction direction : Direction.values())
                 try {
                     BlockEntity entity = level.getBlockEntity(worldPosition.relative(direction));
-                    energyHandler
-                            .into(Energy.of(entity))
-                            .move();
+                    if(entity != null)
+                        energyHandler
+                              .into(Energy.of(entity))
+                              .move();
                 } catch (UnsupportedOperationException ignored){
                 }
 
@@ -48,7 +49,7 @@ public class FabricEnergyOutputSlotBlockEntity extends EnergyOutputSlotBlockEnti
 
     @Override
     public double getMaxInput(EnergySide side) {
-        return energyHandler.getMaxInput();
+        return 0;
     }
 
     @Override

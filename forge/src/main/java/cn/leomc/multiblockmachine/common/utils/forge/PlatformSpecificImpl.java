@@ -1,6 +1,5 @@
 package cn.leomc.multiblockmachine.common.utils.forge;
 
-import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.api.DoubleLong;
 import cn.leomc.multiblockmachine.common.api.IEnergyHandler;
 import cn.leomc.multiblockmachine.forge.api.EnergyHandlerImpl;

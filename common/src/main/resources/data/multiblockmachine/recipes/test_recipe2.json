@@ -1,16 +1,22 @@
 {
   "type": "multiblockmachine:machine",
-  "machine": "test_datapack:test_machine",
+  "machine": "multiblockmachine:testmachine1",
   "inputs": [
     {
-      "item": "minecraft:cobblestone"
+      "ingredient": {
+        "item": "minecraft:cobblestone"
+      }
     },
     {
-      "item": "minecraft:coal",
+      "ingredient": {
+        "item": "minecraft:coal"
+      },
       "count": 2
     },
     {
-      "item": "minecraft:stone",
+      "ingredient": {
+        "item": "minecraft:stone"
+      },
       "count": 5
     }
   ],

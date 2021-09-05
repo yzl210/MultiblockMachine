@@ -1,0 +1,29 @@
+{
+  "type": "multiblockmachine:machine",
+  "machine": "multiblockmachine:energymachine",
+  "inputs": [
+    {
+      "ingredient": {
+        "item": "minecraft:cobblestone"
+      }
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:coal"
+      },
+      "count": 2
+    }
+  ],
+  "results": [
+    {
+      "type": "energy",
+      "amount": 18000
+    },
+    {
+      "type": "energy",
+      "amount": 91208
+    }
+  ],
+  "energy": 10000,
+  "energyMaxInput": 891
+}

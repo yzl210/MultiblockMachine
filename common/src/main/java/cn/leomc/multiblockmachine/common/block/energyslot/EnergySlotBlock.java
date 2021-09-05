@@ -13,7 +13,7 @@ public abstract class EnergySlotBlock extends Block implements EntityBlock {
                 BlockProperties.of(Material.METAL)
                         .tool(ToolType.PICKAXE, 2)
                         .requiresCorrectToolForDrops()
-                        .strength(5, 6)
+                        .strength(3, 5)
                         .sound(SoundType.METAL)
         );
     }

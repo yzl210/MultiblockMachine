@@ -1,6 +1,5 @@
 package cn.leomc.multiblockmachine.common.block.itemslot;
 
-import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
 import me.shedaniel.architectury.registry.MenuRegistry;
@@ -17,7 +16,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemInputSlotBlock extends ItemSlotBlock{
+public class ItemInputSlotBlock extends ItemSlotBlock {
+
+    public static ItemInputSlotBlockEntity getBlockEntity() {
+        return (ItemInputSlotBlockEntity) PlatformSpecific.getBlockEntity("ItemInputSlot");
+    }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
@@ -27,14 +30,9 @@ public class ItemInputSlotBlock extends ItemSlotBlock{
         if (blockEntity instanceof ItemInputSlotBlockEntity) {
             if (player instanceof ServerPlayer)
                 MenuRegistry.openExtendedMenu((ServerPlayer) player, (MenuProvider) blockEntity, packetBuffer -> packetBuffer.writeBlockPos(blockEntity.getBlockPos()));
-                return InteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else
             throw new IllegalStateException("Block entity is not an instance of ItemInputSlotBlockEntity!");
-    }
-
-
-    public static ItemInputSlotBlockEntity getBlockEntity(){
-        return (ItemInputSlotBlockEntity) PlatformSpecific.getBlockEntity("ItemInputSlot");
     }
 
     @Nullable

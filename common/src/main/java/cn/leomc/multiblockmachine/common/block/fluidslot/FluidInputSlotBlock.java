@@ -1,7 +1,5 @@
 package cn.leomc.multiblockmachine.common.block.fluidslot;
 
-import cn.leomc.multiblockmachine.common.block.energyslot.EnergySlotBlock;
-import cn.leomc.multiblockmachine.common.blockentity.energyslot.EnergyInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.fluidslot.FluidInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
 import me.shedaniel.architectury.registry.MenuRegistry;
@@ -21,6 +19,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidInputSlotBlock extends FluidSlotBlock implements EntityBlock {
 
+    public static FluidInputSlotBlockEntity getBlockEntity() {
+        return (FluidInputSlotBlockEntity) PlatformSpecific.getBlockEntity("FluidInputSlot");
+    }
+
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
         if (level.isClientSide || hand != InteractionHand.MAIN_HAND)
@@ -32,10 +34,6 @@ public class FluidInputSlotBlock extends FluidSlotBlock implements EntityBlock {
             return InteractionResult.SUCCESS;
         } else
             throw new IllegalStateException("Block entity is not an instance of FluidInputSlotBlockEntity!");
-    }
-
-    public static FluidInputSlotBlockEntity getBlockEntity() {
-        return (FluidInputSlotBlockEntity) PlatformSpecific.getBlockEntity("FluidInputSlot");
     }
 
     @Nullable

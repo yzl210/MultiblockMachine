@@ -11,21 +11,28 @@
     "homepage": "https://github.com/yzl210/MultiblockMachine",
     "sources": "https://github.com/yzl210/MultiblockMachine"
   },
-  "license": "GNU GPL3",
+  "license": "GNU GPLv3",
   "icon_": "assets/multiblockmachine/icon.png",
   "environment": "*",
+  "mixins": [
+    "multiblockmachine.mixins.json"
+  ],
   "entrypoints": {
     "main": [
       "cn.leomc.multiblockmachine.fabric.MultiblockMachineFabric"
+    ],
+    "rei_plugins": [
+      "cn.leomc.multiblockmachine.fabric.client.compat.rei.REIPlugin"
+    ],
+    "modmenu": [
+      "cn.leomc.multiblockmachine.fabric.client.compat.modmenu.ModMenuCompat"
     ]
   },
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
     "minecraft": ">=1.16.4",
-    "architectury": ">=1.1.55"
-  },
-  "suggests": {
-    "flamingo": "*"
+    "architectury": ">=1.1.55",
+    "cloth-config2": ">=4.9"
   }
 }

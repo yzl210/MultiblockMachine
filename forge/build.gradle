@@ -17,6 +17,9 @@ loom {
 
 repositories {
     maven { url 'https://modmaven.dev/' }
+    maven { url "https://dvs1.progwml6.com/files/maven/"}
+    maven { url "https://www.cursemaven.com"}
+    maven { url "https://maven.tterrag.com/"}
 }
 
 dependencies {
@@ -24,10 +27,20 @@ dependencies {
     // Remove the next line if you don't want to depend on the API
     modApi "me.shedaniel:architectury-forge:${rootProject.architectury_version}"
 
+    modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_version}")
+
+
     modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}"
     modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}:additions"
     modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}:generators"
     modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}:tools"
+
+    modRuntime "curse.maven:jade-324717:3439522"
+    modRuntime "mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22"
+
+
+    modApi "mezz.jei:jei-${rootProject.minecraft_version}:${rootProject.jei_version}:api"
+    modRuntime "mezz.jei:jei-${rootProject.minecraft_version}:${rootProject.jei_version}"
 
     implementation(project(path: ":common")) {
         transitive = false

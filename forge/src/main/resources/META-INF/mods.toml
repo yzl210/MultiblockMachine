@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[35,)"
 #issueTrackerURL = ""
-license = "GNU GPL3"
+license = "GNU GPLv3"
 
 [[mods]]
 modId = "multiblockmachine"
@@ -30,5 +30,12 @@ side = "BOTH"
 modId = "architectury"
 mandatory = true
 versionRange = "[1.1.55,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.multiblockmachine]]
+modId = "cloth-config"
+mandatory = true
+versionRange = "[4.9,)"
 ordering = "AFTER"
 side = "BOTH"

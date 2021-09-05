@@ -2,7 +2,6 @@ package cn.leomc.multiblockmachine.common.blockentity.fluidslot;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.api.SlotType;
-import cn.leomc.multiblockmachine.common.blockentity.energyslot.EnergySlotBlockEntity;
 import cn.leomc.multiblockmachine.common.registry.BlockEntityRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;

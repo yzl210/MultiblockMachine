@@ -1,0 +1,29 @@
+{
+  "type": "multiblockmachine:machine",
+  "machine": "multiblockmachine:testmachine1",
+  "inputs": [
+    {
+      "ingredient": {
+        "item": "minecraft:cobblestone"
+      }
+    },
+    {
+      "ingredient": {
+        "tag": "minecraft:wool"
+      },
+      "count": 2
+    }
+  ],
+  "results": [
+    {
+      "type": "item",
+      "item": "minecraft:stone",
+      "count": 2
+    },
+    {
+      "type": "energy",
+      "amount": 18000
+    }
+  ],
+  "time": 10
+}
