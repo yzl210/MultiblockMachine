@@ -37,13 +37,18 @@ dependencies {
     modApi "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
 
     //modCompileOnly "mcp.mobius.waila:wthit-api:fabric-${rootProject.wthit_version}"
+
+    modRuntimeOnly "lol.bai:badpackets:fabric-0.1.1"
     modRuntimeOnly "mcp.mobius.waila:wthit:fabric-${rootProject.wthit_version}"
 
-    modApi 'teamreborn:energy:2.2.0'
-    modImplementation 'teamreborn:energy:2.2.0'
+    include modApi('teamreborn:energy:2.2.0') {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
-    modApi "me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}"
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}"
+    include modApi("me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}")
+    include modRuntimeOnly ("me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}"){
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

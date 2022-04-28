@@ -19,7 +19,7 @@ public class FluidSlotScreen extends BaseScreen<FluidSlotMenu> {
         super.renderLabels(poseStack, x, y);
 
         Component fluid = new TranslatableComponent("text." + MultiblockMachine.MODID + ".fluid_tank",
-                new TranslatableComponent(menu.getBlockEntity().getFluidHandler().getFluid(0).getTranslationKey()),
+                menu.getBlockEntity().getFluidHandler().getFluid(0).getName(),
                 menu.getBlockEntity().getFluidHandler().getFluid(0).getAmount());
         Minecraft.getInstance().font.draw(poseStack, fluid.getString(), getCenteredOffset(title.getString()), 30, 0x404040);
     }

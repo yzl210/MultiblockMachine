@@ -39,11 +39,11 @@ public class MachineItem extends Item {
             if(context.getLevel().isClientSide)
                 return structure == null ? InteractionResult.PASS : InteractionResult.CONSUME;
 
-            BlockPos pos = context.getClickedPos().offset(0, 1, 0);
+            BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
 
             if(context.getPlayer().isShiftKeyDown())
                 MultiblockStructures.buildStructure(structure, (ServerLevel) context.getLevel(), pos, context.getHorizontalDirection().getOpposite());
-            //else
+            else
                 MultiblockStructures.buildStructureInstruction(structure, (ServerLevel) context.getLevel(), pos, context.getHorizontalDirection().getOpposite());
         }
 

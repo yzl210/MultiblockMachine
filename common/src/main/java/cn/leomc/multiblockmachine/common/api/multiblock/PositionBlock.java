@@ -5,20 +5,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 public class PositionBlock implements Predicate<Block> {
 
@@ -85,19 +83,18 @@ public class PositionBlock implements Predicate<Block> {
     }
 
     public List<Value> getValues() {
-        return values;
+        return List.copyOf(values);
     }
 
     private void dissolve() {
-        if (!blocks.isEmpty())
-            return;
-        for (Value value : values)
-            blocks.addAll(value.getBlocks());
+        if (blocks.isEmpty())
+            for (Value value : values)
+                blocks.addAll(value.getBlocks());
     }
 
     public List<Block> getAllowedBlocks() {
         dissolve();
-        return blocks;
+        return List.copyOf(blocks);
     }
 
     public boolean test(Block block) {
@@ -147,20 +144,20 @@ public class PositionBlock implements Predicate<Block> {
     }
 
     public static class TagValue implements Value {
-        private final Optional<HolderSet.Named<Block>> tag;
+        private final TagKey<Block> tag;
         private final ResourceLocation id;
 
         public TagValue(ResourceLocation id) {
-            this.tag = Registry.BLOCK.getTag(TagKey.create(Registry.BLOCK_REGISTRY, id));
+            this.tag = TagKey.create(Registry.BLOCK_REGISTRY, id);
             this.id = id;
         }
 
         @Override
         public List<Block> getBlocks() {
-            return tag.isPresent() ? tag.get().stream().map(Holder::value).toList() : Collections.emptyList();
+            return StreamSupport.stream(Registry.BLOCK.getTagOrEmpty(tag).spliterator(), false).map(Holder::value).toList();
         }
 
-        public Optional<HolderSet.Named<Block>> getTag() {
+        public TagKey<Block> getTag() {
             return tag;
         }
 

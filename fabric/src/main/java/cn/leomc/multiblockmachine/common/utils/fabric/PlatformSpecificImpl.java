@@ -2,6 +2,7 @@ package cn.leomc.multiblockmachine.common.utils.fabric;
 
 import cn.leomc.multiblockmachine.common.api.IEnergyHandler;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
+import cn.leomc.multiblockmachine.fabric.FabricCreativeEnergySourceBlockEntity;
 import cn.leomc.multiblockmachine.fabric.api.EnergyHandlerImpl;
 import cn.leomc.multiblockmachine.fabric.common.blockentity.energyslot.FabricEnergyInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.fabric.common.blockentity.energyslot.FabricEnergyOutputSlotBlockEntity;
@@ -28,6 +29,7 @@ public class PlatformSpecificImpl {
             case FLUID_OUTPUT_SLOT -> new FabricFluidOutputSlotBlockEntity(pos, state);
             case ENERGY_INPUT_SLOT -> new FabricEnergyInputSlotBlockEntity(pos, state);
             case ENERGY_OUTPUT_SLOT -> new FabricEnergyOutputSlotBlockEntity(pos, state);
+            case CREATIVE_ENERGY_SOURCE -> new FabricCreativeEnergySourceBlockEntity(pos, state);
         };
     }
 

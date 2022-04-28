@@ -18,8 +18,8 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 public class FluidIngredient implements Predicate<Fluid> {
 
@@ -92,10 +92,9 @@ public class FluidIngredient implements Predicate<Fluid> {
     }
 
     private void dissolve() {
-        if (!fluids.isEmpty())
-            return;
-        for (Value value : values)
-            fluids.addAll(value.getFluids());
+        if (fluids.isEmpty())
+            for (Value value : values)
+                fluids.addAll(value.getFluids());
     }
 
     public List<Fluid> getFluids() {
@@ -103,6 +102,7 @@ public class FluidIngredient implements Predicate<Fluid> {
         return fluids;
     }
 
+    @Override
     public boolean test(Fluid fluid) {
         dissolve();
         return fluids.stream().anyMatch(fluid1 -> Registry.FLUID.getKey(fluid).equals(Registry.FLUID.getKey(fluid1)));
@@ -150,20 +150,20 @@ public class FluidIngredient implements Predicate<Fluid> {
     }
 
     public static class TagValue implements Value {
-        private final Optional<HolderSet.Named<Fluid>> tag;
+        private final TagKey<Fluid> tag;
         private final ResourceLocation id;
 
         public TagValue(ResourceLocation id) {
-            this.tag = Registry.FLUID.getTag(TagKey.create(Registry.FLUID_REGISTRY, id));
+            this.tag = TagKey.create(Registry.FLUID_REGISTRY, id);
             this.id = id;
         }
 
         @Override
         public List<Fluid> getFluids() {
-            return tag.isPresent() ? tag.get().stream().map(Holder::value).toList() : Collections.emptyList();
+            return StreamSupport.stream(Registry.FLUID.getTagOrEmpty(tag).spliterator(), false).map(Holder::value).toList();
         }
 
-        public Optional<HolderSet.Named<Fluid>> getTag() {
+        public TagKey<Fluid> getTag() {
             return tag;
         }
 
