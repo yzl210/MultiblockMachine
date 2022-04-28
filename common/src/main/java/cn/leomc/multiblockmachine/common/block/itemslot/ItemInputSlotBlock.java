@@ -2,7 +2,7 @@ package cn.leomc.multiblockmachine.common.block.itemslot;
 
 import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
-import me.shedaniel.architectury.registry.MenuRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -18,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemInputSlotBlock extends ItemSlotBlock {
 
-    public static ItemInputSlotBlockEntity getBlockEntity() {
-        return (ItemInputSlotBlockEntity) PlatformSpecific.getBlockEntity("ItemInputSlot");
+    public static ItemInputSlotBlockEntity getBlockEntity(BlockPos pos, BlockState state) {
+        return (ItemInputSlotBlockEntity) PlatformSpecific.getBlockEntity(PlatformSpecific.BlockEntities.ITEM_INPUT_SLOT, pos, state);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class ItemInputSlotBlock extends ItemSlotBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockGetter blockGetter) {
-        return getBlockEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return getBlockEntity(pos, state);
     }
 
 

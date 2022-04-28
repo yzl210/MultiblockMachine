@@ -1,6 +1,7 @@
 package cn.leomc.multiblockmachine.common.api.multiblock;
 
 import cn.leomc.multiblockmachine.common.api.IEnergySlot;
+import cn.leomc.multiblockmachine.common.api.IFluidSlot;
 import cn.leomc.multiblockmachine.common.api.IItemSlot;
 import cn.leomc.multiblockmachine.common.api.recipe.MachineRecipe;
 import cn.leomc.multiblockmachine.common.registry.ItemRegistry;
@@ -31,14 +32,15 @@ public class MultiblockStructure {
 
     private List<IItemSlot> itemSlots;
     private List<IEnergySlot> energySlots;
+    private List<IFluidSlot> fluidSlots;
+
 
     public MultiblockStructure(ResourceLocation id, Map<BlockPos, PositionBlock> map) {
         this.id = id;
         this.BLOCKS = map;
         this.RECIPES = new HashMap<>();
-        ItemStack itemStack = new ItemStack(ItemRegistry.MACHINE_ITEM.get());
-        itemStack.getOrCreateTag().putString("machine", id.toString());
-        this.item = itemStack;
+        this.item = new ItemStack(ItemRegistry.MACHINE_ITEM.get());
+        item.getOrCreateTag().putString("machine", id.toString());
     }
 
     public static MultiblockStructure of(CompoundTag tag) {
@@ -59,6 +61,8 @@ public class MultiblockStructure {
     public boolean isFormed(Level level, BlockPos origin, Direction facing) {
         List<IItemSlot> itemSlots = new ArrayList<>();
         List<IEnergySlot> energySlots = new ArrayList<>();
+        List<IFluidSlot> fluidSlots = new ArrayList<>();
+
 
         for (Map.Entry<BlockPos, PositionBlock> entry : BLOCKS.entrySet()) {
 
@@ -69,19 +73,24 @@ public class MultiblockStructure {
                 return false;
 
             BlockEntity entity = level.getBlockEntity(pos);
-            if (entity instanceof IItemSlot)
-                itemSlots.add((IItemSlot) entity);
-            if (entity instanceof IEnergySlot)
-                energySlots.add((IEnergySlot) entity);
+            if (entity instanceof IItemSlot itemSlot)
+                itemSlots.add(itemSlot);
+            if (entity instanceof IEnergySlot energySlot)
+                energySlots.add(energySlot);
+            if (entity instanceof IFluidSlot fluidSlot)
+                fluidSlots.add(fluidSlot);
 
         }
 
         this.itemSlots = itemSlots;
         this.energySlots = energySlots;
+        this.fluidSlots = fluidSlots;
         return true;
     }
 
     public MultiblockStructure addBlock(BlockPos pos, PositionBlock positionBlock) {
+        if(BLOCKS.containsKey(pos))
+            throw new IllegalArgumentException("Pos " + pos + " has already defined before");
         BLOCKS.put(pos, positionBlock);
         return this;
     }
@@ -112,6 +121,10 @@ public class MultiblockStructure {
 
     public List<IItemSlot> getItemSlots() {
         return itemSlots;
+    }
+
+    public List<IFluidSlot> getFluidSlots() {
+        return fluidSlots;
     }
 
     public ItemStack getItem() {

@@ -3,11 +3,13 @@
   "machine": "multiblockmachine:testmachine1",
   "inputs": [
     {
+      "type": "item",
       "ingredient": {
         "item": "minecraft:cobblestone"
       }
     },
     {
+      "type": "item",
       "ingredient": {
         "tag": "minecraft:wool"
       },

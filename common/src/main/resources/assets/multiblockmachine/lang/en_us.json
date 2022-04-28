@@ -1,6 +1,6 @@
 {
   "block.multiblockmachine.controller": "Controller",
-  "block.multiblockmachine.instruction_block": "Right Click to see",
+  "block.multiblockmachine.instruction_block": "Right Click to See Details",
   "block.multiblockmachine.item_input_slot": "Item Input Slot",
   "block.multiblockmachine.item_output_slot": "Item Output Slot",
   "block.multiblockmachine.energy_input_slot": "Energy Input Slot",
@@ -8,13 +8,14 @@
   "block.multiblockmachine.fluid_input_slot": "Fluid Input Slot",
   "block.multiblockmachine.fluid_output_slot": "Fluid Output Slot",
   "item.multiblockmachine.machine_item": "Multiblock Machine",
+  "item.multiblockmachine.machine_item_has_structure": "Multiblock Machine (%s)",
   "container.multiblockmachine.item_input_slot": "Item Input Slot",
   "container.multiblockmachine.item_output_slot": "Item Output Slot",
   "container.multiblockmachine.energy_input_slot": "Energy Input Slot",
   "container.multiblockmachine.energy_output_slot": "Energy Output Slot",
   "container.multiblockmachine.fluid_input_slot": "Fluid Input Slot",
   "container.multiblockmachine.fluid_output_slot": "Fluid Output Slot",
-  "text.multiblockmachine.not_formed": "Machine not detected, please check whether the structure is complete and the direction of the controller!",
+  "text.multiblockmachine.not_formed": "Machine not detected, please check if the structure is complete and the direction of the controller!",
   "text.multiblockmachine.fluid_tank": "%s: %s mB",
   "text.multiblockmachine.recipe": "Multiblock Machine",
   "text.multiblockmachine.controller.progress": "Progress: %s",
@@ -23,10 +24,23 @@
   "text.multiblockmachine.controller.status.no_input": "Recipe not Found",
   "text.multiblockmachine.controller.status.output_full": "Output is Full",
   "text.multiblockmachine.controller.status.no_energy": "Not Enough Energy",
-  "text.multiblockmachine.controller.status.not_formed": "You should not see this!Please report to me!",
+  "text.multiblockmachine.controller.status.not_formed": "Not Formed",
   "text.multiblockmachine.accept": "Accept Any(Mouse Hover to See Tag): %s",
   "text.multiblockmachine.accept.tag": "Tag: %s",
   "text.multiblockmachine.accept.block": "Block: %s",
+  "text.multiblockmachine.show_structure": "Show Structure",
+  "text.multiblockmachine.build_instruction_category": "Build Instruction",
+  "text.multiblockmachine.show_instruction": "Right click a block to display instruction",
+
+
+  "text.multiblockmachine.additional_inputs": "Additional Inputs",
+  "text.multiblockmachine.additional_outputs": "Additional Outputs",
+
+  "text.multiblockmachine.ingredient.empty": "Empty",
+  "text.multiblockmachine.ingredient.energy": "Energy: %s %s",
+  "text.multiblockmachine.ingredient.energy_max_input": "(%s %s/t)",
+
+
   "text.autoconfig.multiblockmachine.title": "Multiblock Machine Configuration",
   "text.autoconfig.multiblockmachine.category.common": "Common",
   "text.autoconfig.multiblockmachine.option.common.controller": "Controller",

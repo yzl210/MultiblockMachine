@@ -1,19 +1,21 @@
 package cn.leomc.multiblockmachine.common.blockentity.energyslot;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
-import cn.leomc.multiblockmachine.common.api.DoubleLong;
 import cn.leomc.multiblockmachine.common.api.IEnergyHandler;
 import cn.leomc.multiblockmachine.common.api.SlotType;
 import cn.leomc.multiblockmachine.common.api.UpgradeType;
 import cn.leomc.multiblockmachine.common.registry.BlockEntityRegistry;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
+import dev.architectury.hooks.block.BlockEntityHooks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class EnergyOutputSlotBlockEntity extends EnergySlotBlockEntity {
 
-    public EnergyOutputSlotBlockEntity() {
-        super(BlockEntityRegistry.ENERGY_OUTPUT_SLOT.get());
+    public EnergyOutputSlotBlockEntity(BlockPos pos, BlockState state) {
+        super(BlockEntityRegistry.ENERGY_OUTPUT_SLOT.get(), pos, state);
     }
 
     @Override
@@ -28,13 +30,16 @@ public class EnergyOutputSlotBlockEntity extends EnergySlotBlockEntity {
 
     @Override
     public IEnergyHandler createEnergyHandler() {
-        double capacity = MultiblockMachine.CONFIG.common.energy_output_slot.capacity;
-        double output = MultiblockMachine.CONFIG.common.energy_output_slot.output;
+        long capacity = MultiblockMachine.CONFIG.common.energy_output_slot.capacity;
+        long output = MultiblockMachine.CONFIG.common.energy_output_slot.output;
         if(MultiblockMachine.CONFIG.common.upgrades.enable_capacity)
             capacity *= upgrades.getMultiplier(UpgradeType.CAPACITY);
         if(MultiblockMachine.CONFIG.common.upgrades.enable_speed)
             output *= upgrades.getMultiplier(UpgradeType.SPEED);
 
-        return PlatformSpecific.createEnergyHandler(DoubleLong.of(capacity), DoubleLong.of(0), DoubleLong.of(output));
+        return PlatformSpecific.createEnergyHandler(capacity, 0, output, unused -> {
+            if(level != null && !level.isClientSide)
+                BlockEntityHooks.syncData(this);
+        });
     }
 }

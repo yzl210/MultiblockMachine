@@ -1,6 +1,7 @@
 package cn.leomc.multiblockmachine.common.blockentity;
 
 import cn.leomc.multiblockmachine.common.api.UpgradeItemContainer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -10,19 +11,18 @@ public class UpgradableBlockEntity extends BlockEntity {
 
     protected UpgradeItemContainer upgrades = new UpgradeItemContainer(4);
 
-    public UpgradableBlockEntity(BlockEntityType<?> blockEntityType) {
-        super(blockEntityType);
+    public UpgradableBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+        super(blockEntityType, pos, state);
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag) {
         tag.put("upgrades", upgrades.createTag());
-        return super.save(tag);
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
-        super.load(state, tag);
+    public void load(CompoundTag tag) {
+        super.load(tag);
         upgrades.fromTag(tag.getList("upgrades", 10));
     }
 

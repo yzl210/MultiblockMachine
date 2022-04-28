@@ -3,11 +3,48 @@
   "machine": "multiblockmachine:testmachine1",
   "inputs": [
     {
+      "type": "energy",
       "ingredient": {
-        "item": "minecraft:cobblestone"
+        "amount": 10000
       }
     },
     {
+      "type": "fluid",
+      "ingredient": [
+        {
+          "fluid": "minecraft:water"
+        }
+      ],
+      "amount": 1000
+    },
+    {
+      "type": "fluid",
+      "ingredient": [
+        {
+          "fluid": "minecraft:water"
+        },
+        {
+          "fluid": "minecraft:lava"
+        }
+      ],
+      "amount": 2000
+    },
+    {
+      "type": "fluid",
+      "ingredient":
+        {
+          "fluid": "minecraft:lava"
+        },
+      "amount": 1000
+    },
+    {
+      "type": "item",
+      "ingredient": {
+        "item": "minecraft:stone"
+      }
+    },
+    {
+      "type": "item",
       "ingredient": {
         "item": "minecraft:coal"
       },
@@ -21,10 +58,14 @@
       "count": 2
     },
     {
+      "type": "fluid",
+      "fluid": "minecraft:water",
+      "amount": 750
+    },
+    {
       "type": "energy",
       "amount": 18000
     }
   ],
-  "energy": 10000,
-  "energyMaxInput": 50
+  "energyMaxInput": 100
 }

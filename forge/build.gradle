@@ -1,9 +1,11 @@
-plugins {
-    id "com.github.johnrengelman.shadow" version "5.0.0"
+    plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
-
-configurations {
-    shadowCommon
+loom {
+    forge {
+        mixinConfig "multiblockmachine-common.mixins.json"
+        mixinConfig "multiblockmachine.mixins.json"
+    }
 }
 
 architectury {
@@ -12,46 +14,55 @@ architectury {
 }
 
 loom {
-    useFabricMixin = true
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    forge {
+        convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
 }
 
 repositories {
     maven { url 'https://modmaven.dev/' }
     maven { url "https://dvs1.progwml6.com/files/maven/"}
     maven { url "https://www.cursemaven.com"}
-    maven { url "https://maven.tterrag.com/"}
+    maven { url "https://maven.k-4u.nl/"}
 }
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
-    modApi "me.shedaniel:architectury-forge:${rootProject.architectury_version}"
+    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
 
-    modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_version}")
+    modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
+    //modRuntimeOnly "mekanism:Mekanism:${rootProject.mekanism_version}"
+    //modRuntimeOnly "mekanism:Mekanism:${rootProject.mekanism_version}:additions"
+    //modRuntimeOnly "mekanism:Mekanism:${rootProject.mekanism_version}:generators"
+    //modRuntimeOnly "mekanism:Mekanism:${rootProject.mekanism_version}:tools"
 
-    modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}"
-    modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}:additions"
-    modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}:generators"
-    modRuntime "mekanism:Mekanism:${rootProject.mekanism_version}:tools"
-
-    modRuntime "curse.maven:jade-324717:3439522"
-    modRuntime "mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22"
+    modRuntimeOnly "curse.maven:pipez-443900:3736957"
+    modRuntimeOnly "curse.maven:jade-324717:3681449"
+    modRuntimeOnly "curse.maven:top-245211:3671753"
 
 
     modApi "mezz.jei:jei-${rootProject.minecraft_version}:${rootProject.jei_version}:api"
-    modRuntime "mezz.jei:jei-${rootProject.minecraft_version}:${rootProject.jei_version}"
+    modRuntimeOnly "mezz.jei:jei-${rootProject.minecraft_version}:${rootProject.jei_version}"
 
-    implementation(project(path: ":common")) {
-        transitive = false
-    }
-    developmentForge(project(path: ":common")) {
-        transitive = false
-    }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
-        transitive = false
-    }
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 }
+
 
 processResources {
     inputs.property "version", project.version
@@ -63,6 +74,7 @@ processResources {
 
 shadowJar {
     exclude "fabric.mod.json"
+    exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
     classifier "dev-shadow"
@@ -71,19 +83,21 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier "forge"
+    classifier null
 }
 
 jar {
     classifier "dev"
 }
 
-java {
-    withSourcesJar()
-}
-
 sourcesJar {
     def commonSources = project(":common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
 }

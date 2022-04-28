@@ -1,6 +1,5 @@
 package cn.leomc.multiblockmachine.common.config;
 
-import cn.leomc.multiblockmachine.MultiblockMachine;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -24,6 +23,10 @@ public class CommonConfig implements ConfigData {
     @ConfigEntry.Category("upgrades")
     @ConfigEntry.Gui.CollapsibleObject
     public Upgrades upgrades = new Upgrades();
+
+    @ConfigEntry.Category("miscellaneous")
+    @ConfigEntry.Gui.CollapsibleObject
+    public Miscellaneous miscellaneous = new Miscellaneous();
 
     @Config(name = "upgrades")
     public static class Upgrades implements ConfigData {
@@ -65,11 +68,11 @@ public class CommonConfig implements ConfigData {
 
         @ConfigEntry.Gui.TransitiveObject
         @Comment("Range: >= 0\nThe base capacity of the energy input slot")
-        public double capacity = 1024;
+        public long capacity = 1024;
 
         @ConfigEntry.Gui.TransitiveObject
         @Comment("Range: >= 0\nThe base max energy receive per tick of the energy input slot")
-        public double input = 128;
+        public long input = 128;
 
         @Override
         public void validatePostLoad() {
@@ -86,11 +89,11 @@ public class CommonConfig implements ConfigData {
 
         @ConfigEntry.Gui.TransitiveObject
         @Comment("Range: >= 0\nThe base capacity of the energy output slot")
-        public double capacity = 1024;
+        public long capacity = 1024;
 
         @ConfigEntry.Gui.TransitiveObject
         @Comment("Range: >= 0\nThe base max energy extract per tick of the energy output slot")
-        public double output = 128;
+        public long output = 128;
 
         @Override
         public void validatePostLoad() {
@@ -101,11 +104,26 @@ public class CommonConfig implements ConfigData {
         }
 
     }
+    @Config(name = "miscellaneous")
+    public static class Miscellaneous implements ConfigData {
+
+        @ConfigEntry.Gui.TransitiveObject
+        @Comment("Range: >= 0\nThe interval of structure projection in ms")
+        public long show_instruction_interval = 5000;
+
+        @Override
+        public void validatePostLoad() {
+            if(show_instruction_interval < 0)
+                show_instruction_interval = 0;
+        }
+    }
+
 
     @Override
     public void validatePostLoad() {
         controller.validatePostLoad();
         energy_input_slot.validatePostLoad();
         energy_output_slot.validatePostLoad();
+        miscellaneous.validatePostLoad();
     }
 }

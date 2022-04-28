@@ -1,8 +1,9 @@
 package cn.leomc.multiblockmachine.forge.api;
 
-import cn.leomc.multiblockmachine.common.api.DoubleLong;
 import cn.leomc.multiblockmachine.common.api.IEnergyHandler;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.util.function.Consumer;
 
 public class EnergyHandlerImpl implements IEnergyHandler, IEnergyStorage {
 
@@ -10,39 +11,45 @@ public class EnergyHandlerImpl implements IEnergyHandler, IEnergyStorage {
     private long capacity;
     private long maxReceive;
     private long maxExtract;
+    private Consumer<Long> onChanged;
 
-    public EnergyHandlerImpl(DoubleLong capacity, DoubleLong maxReceive, DoubleLong maxExtract) {
+
+    public EnergyHandlerImpl(long capacity, long maxReceive, long maxExtract, Consumer<Long> onChanged) {
         this.energy = 0;
-        this.capacity = capacity.longValue;
-        this.maxReceive = maxReceive.longValue;
-        this.maxExtract = maxExtract.longValue;
+        this.capacity = capacity;
+        this.maxReceive = maxReceive;
+        this.maxExtract = maxExtract;
+        this.onChanged = onChanged;
     }
 
     @Override
-    public DoubleLong receiveEnergy(DoubleLong maxReceive, boolean simulate, boolean force) {
+    public long receiveEnergy(long maxReceive, boolean simulate, boolean force) {
         if (!force && !canReceive())
-            return DoubleLong.of(0);
+            return 0;
 
-        long energyReceived = Math.min(capacity - energy, force ? maxReceive.longValue : Math.min(this.maxReceive, maxReceive.longValue));
+        long energyReceived = Math.min(capacity - energy, force ? maxReceive : Math.min(this.maxReceive, maxReceive));
         if (!simulate)
             energy += energyReceived;
-        return DoubleLong.of(energyReceived);
+        onChanged.accept(energy);
+        return energyReceived;
     }
 
     @Override
-    public DoubleLong extractEnergy(DoubleLong maxExtract, boolean simulate, boolean force) {
+    public long extractEnergy(long maxExtract, boolean simulate, boolean force) {
         if (!force && !canExtract())
-            return DoubleLong.of(0);
+            return 0;
 
-        long energyExtracted = Math.min(energy, force ? maxExtract.longValue : Math.min(this.maxExtract, maxExtract.longValue));
+        long energyExtracted = Math.min(energy, force ? maxExtract : Math.min(this.maxExtract, maxExtract));
         if (!simulate)
             energy -= energyExtracted;
-        return DoubleLong.of(energyExtracted);
+        onChanged.accept(energy);
+        return energyExtracted;
     }
 
     @Override
-    public void setEnergyStored(DoubleLong energy) {
-        this.energy = energy.longValue;
+    public void setEnergyStored(long energy) {
+        this.energy = energy;
+        onChanged.accept(null);
     }
 
     @Override
@@ -61,9 +68,10 @@ public class EnergyHandlerImpl implements IEnergyHandler, IEnergyStorage {
         if (!canExtract())
             return 0;
 
-        int energyExtracted = (int) Math.min(energy, Math.min(maxExtract, (int) this.maxExtract));
+        int energyExtracted = (int) Math.min(energy, Math.min(maxExtract, this.maxExtract));
         if (!simulate)
             energy -= energyExtracted;
+        onChanged.accept(null);
         return energyExtracted;
     }
 
@@ -78,13 +86,13 @@ public class EnergyHandlerImpl implements IEnergyHandler, IEnergyStorage {
     }
 
     @Override
-    public DoubleLong getEnergy() {
-        return DoubleLong.of(energy);
+    public long getEnergy() {
+        return energy;
     }
 
     @Override
-    public DoubleLong getMaxEnergy() {
-        return DoubleLong.of(capacity);
+    public long getMaxEnergy() {
+        return capacity;
     }
 
     @Override
@@ -95,5 +103,12 @@ public class EnergyHandlerImpl implements IEnergyHandler, IEnergyStorage {
     @Override
     public boolean canReceive() {
         return maxReceive > 0;
+    }
+
+    @Override
+    public IEnergyHandler copy() {
+        EnergyHandlerImpl energyHandler = new EnergyHandlerImpl(capacity, maxReceive, maxExtract, unused -> {});
+        energyHandler.setEnergyStored(energy);
+        return energyHandler;
     }
 }

@@ -2,14 +2,13 @@ package cn.leomc.multiblockmachine.common.block.itemslot;
 
 import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemOutputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
-import me.shedaniel.architectury.registry.MenuRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemOutputSlotBlock extends ItemSlotBlock {
 
-    public static ItemOutputSlotBlockEntity getBlockEntity() {
-        return (ItemOutputSlotBlockEntity) PlatformSpecific.getBlockEntity("ItemOutputSlot");
+    public static ItemOutputSlotBlockEntity getBlockEntity(BlockPos pos, BlockState state) {
+        return (ItemOutputSlotBlockEntity) PlatformSpecific.getBlockEntity(PlatformSpecific.BlockEntities.ITEM_OUTPUT_SLOT, pos, state);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class ItemOutputSlotBlock extends ItemSlotBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockGetter blockGetter) {
-        return getBlockEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return getBlockEntity(pos, state);
     }
 }

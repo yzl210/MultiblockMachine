@@ -34,14 +34,14 @@ public abstract class BaseScreen<C extends AbstractContainerMenu> extends Abstra
 
     @Override
     protected void renderLabels(PoseStack poseStack, int x, int y) {
-        Minecraft.getInstance().font.draw(poseStack, title.getString(), getCenteredOffset(title.getString()), 6, 0x404040);
-        Minecraft.getInstance().font.draw(poseStack, inventory.getDisplayName().getString(), 8, imageHeight - 96 + 3, 0x404040);
+        Minecraft.getInstance().font.draw(poseStack, title, getCenteredOffset(title.getString()), 6, 0x404040);
+        Minecraft.getInstance().font.draw(poseStack, playerInventoryTitle, 8, imageHeight - 96 + 3, 0x404040);
     }
 
     @Override
     protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        minecraft.getTextureManager().bind(InventoryMenu.BLOCK_ATLAS);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         blit(poseStack, relX, relY, 0, this.imageWidth, this.imageWidth, Textures.GENERIC_GUI.get());
@@ -60,9 +60,9 @@ public abstract class BaseScreen<C extends AbstractContainerMenu> extends Abstra
     }
 
 
-    protected void addSlot(int x, int y, int horizonal, int dx, int vertical, int dy) {
+    protected void addSlot(int x, int y, int horizontal, int dx, int vertical, int dy) {
         for (int j = 0; j < vertical; j++) {
-            addSlot(x, y, horizonal, dx);
+            addSlot(x, y, horizontal, dx);
             y += dy;
         }
     }
@@ -78,6 +78,5 @@ public abstract class BaseScreen<C extends AbstractContainerMenu> extends Abstra
     public Font getFont() {
         return font;
     }
-
 
 }

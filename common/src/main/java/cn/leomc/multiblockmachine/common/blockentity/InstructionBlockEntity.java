@@ -1,28 +1,26 @@
 package cn.leomc.multiblockmachine.common.blockentity;
 
+import cn.leomc.multiblockmachine.common.api.ITickableBlockEntity;
 import cn.leomc.multiblockmachine.common.api.multiblock.PositionBlock;
 import cn.leomc.multiblockmachine.common.registry.BlockEntityRegistry;
-import me.shedaniel.architectury.extensions.BlockEntityExtension;
+import dev.architectury.hooks.block.BlockEntityHooks;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 
-public class InstructionBlockEntity extends BlockEntity implements TickableBlockEntity, BlockEntityExtension {
+public class InstructionBlockEntity extends BlockEntity implements ITickableBlockEntity {
 
     private PositionBlock block;
 
@@ -32,27 +30,21 @@ public class InstructionBlockEntity extends BlockEntity implements TickableBlock
 
     private int ticks;
 
-    public InstructionBlockEntity() {
-        super(BlockEntityRegistry.INSTRUCTION_BLOCK.get());
-        this.block = PositionBlock.of();
+    public InstructionBlockEntity(BlockPos pos, BlockState state) {
+        super(BlockEntityRegistry.INSTRUCTION_BLOCK.get(), pos, state);
+        block = PositionBlock.of();
         states = new ArrayList<>();
+        ticks = 0;
     }
 
-    @Override
-    public void setLevelAndPosition(Level level, BlockPos blockPos) {
-        super.setLevelAndPosition(level, blockPos);
-        if(!level.isClientSide)
-            syncData();
-    }
 
     @Override
-    public void tick() {
-        if(level.isClientSide){
-            ticks++;
-            if(ticks >= states.size() * 40)
-                ticks = 0;
-        }
+    public void clientTick(ClientLevel level, BlockPos pos, BlockState state) {
+        ticks++;
+        if(ticks >= states.size() * 40)
+            ticks = 0;
     }
+
 
     public BlockState getMimic(){
         return special != null ? special : states.size() == 0 ? Blocks.AIR.defaultBlockState() : states.get(Math.floorDiv(ticks, 40));
@@ -72,46 +64,46 @@ public class InstructionBlockEntity extends BlockEntity implements TickableBlock
                 .stream()
                 .map(Block::defaultBlockState)
                 .collect(Collectors.toList());
+        if(level != null && !level.isClientSide)
+            BlockEntityHooks.syncData(this);
     }
 
 
     public void setSpecial(BlockState state) {
         this.special = state;
+        if(level != null && !level.isClientSide)
+            BlockEntityHooks.syncData(this);
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag) {
         if(special != null)
             tag.putInt("state", Block.BLOCK_STATE_REGISTRY.getId(special));
         else
             tag.put("block", block.save());
-        return super.save(tag);
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
-        super.load(state, tag);
+    public void load(CompoundTag tag) {
         if(tag.contains("state"))
             special = Block.BLOCK_STATE_REGISTRY.byId(tag.getInt("state"));
         else
             setBlock(PositionBlock.of(tag.getCompound("block")));
     }
 
+    @Nullable
     @Override
-    public void loadClientData(BlockState state, CompoundTag tag) {
-        if(tag.contains("state"))
-            special = Block.BLOCK_STATE_REGISTRY.byId(tag.getInt("state"));
-        else
-            setBlock(PositionBlock.of(tag.getCompound("block")));    }
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
 
     @Override
-    public CompoundTag saveClientData(CompoundTag tag) {
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = new CompoundTag();
         if(special != null)
             tag.putInt("state", Block.BLOCK_STATE_REGISTRY.getId(special));
         else
             tag.put("block", block.save());
         return tag;
     }
-
-
 }

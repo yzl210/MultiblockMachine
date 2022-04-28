@@ -3,6 +3,7 @@ package cn.leomc.multiblockmachine.common.blockentity.itemslot;
 import cn.leomc.multiblockmachine.common.api.IItemSlot;
 import cn.leomc.multiblockmachine.common.blockentity.UpgradableBlockEntity;
 import cn.leomc.multiblockmachine.common.menu.itemslot.ItemSlotMenu;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
@@ -19,23 +20,19 @@ public abstract class ItemSlotBlockEntity extends UpgradableBlockEntity implemen
 
     protected SimpleContainer container;
 
-
-    public ItemSlotBlockEntity(BlockEntityType<?> blockEntityType) {
-        super(blockEntityType);
+    public ItemSlotBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+        super(blockEntityType, pos, state);
         container = createContainer();
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundTag) {
-        super.save(compoundTag);
-        compoundTag.put("container", container.createTag());
-        return compoundTag;
+    public void saveAdditional(CompoundTag tag) {
+        tag.put("container", container.createTag());
     }
 
     @Override
-    public void load(BlockState blockState, CompoundTag compoundTag) {
-        super.load(blockState, compoundTag);
-        container.fromTag(compoundTag.getList("container", 10));
+    public void load(CompoundTag tag) {
+        container.fromTag(tag.getList("container", 10));
     }
 
     @Nullable
@@ -56,6 +53,5 @@ public abstract class ItemSlotBlockEntity extends UpgradableBlockEntity implemen
     public Container getContainer() {
         return container;
     }
-
 
 }

@@ -2,21 +2,23 @@ package cn.leomc.multiblockmachine.common.block;
 
 import cn.leomc.multiblockmachine.common.api.multiblock.PositionBlock;
 import cn.leomc.multiblockmachine.common.blockentity.InstructionBlockEntity;
+import cn.leomc.multiblockmachine.common.utils.Utils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -26,6 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class InstructionBlock extends Block implements EntityBlock {
 
@@ -42,50 +45,47 @@ public class InstructionBlock extends Block implements EntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        if(!level.isClientSide || hand != InteractionHand.MAIN_HAND)
+        if(!level.isClientSide ||hand != InteractionHand.MAIN_HAND)
             return InteractionResult.PASS;
 
         if(player.getItemInHand(hand).isEmpty()){
             BlockEntity blockEntity = level.getBlockEntity(pos);
-            if(blockEntity instanceof InstructionBlockEntity) {
-                InstructionBlockEntity instructionBlockEntity = ((InstructionBlockEntity) blockEntity);
+            if(blockEntity instanceof InstructionBlockEntity instructionBlockEntity) {
+                TextComponent component = new TextComponent("");
 
-                MutableComponent component = new TextComponent("\n");
-
-                if(instructionBlockEntity.getSpecial() != null)
-                    component.append(new TranslatableComponent("text.multiblockmachine.accept.block", instructionBlockEntity.getSpecial().getBlock().getName()));
-                else {
-
-                    Iterator<PositionBlock.Value> valueIterator = instructionBlockEntity.getBlock().getValues().iterator();
-
-                    while (valueIterator.hasNext()) {
-                        PositionBlock.Value value = valueIterator.next();
-                        if (value instanceof PositionBlock.TagValue) {
-                            MutableComponent blocks = new TextComponent("");
-                            Iterator<Block> iterator = value.getBlocks().iterator();
-                            while (iterator.hasNext()) {
-                                blocks.append(iterator.next().getName().getString());
-                                if (iterator.hasNext())
-                                    blocks.append(", ");
-                            }
-
+                if(instructionBlockEntity.getSpecial() == null){
+                    for (PositionBlock.Value value : instructionBlockEntity.getBlock().getValues()) {
+                        component.append("\n");
+                        if (value instanceof PositionBlock.TagValue tagValue) {
                             component.append(new TranslatableComponent("text.multiblockmachine.accept.tag",
-                                    new TextComponent(((PositionBlock.TagValue) value).getTag().getName().toString()))
-                                    .withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, blocks))));
+                                    new TextComponent(tagValue.getId().toString()).withStyle(style -> style
+                                            .withBold(false)
+                                            .withUnderlined(true)
+                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                                    new TextComponent(value.getBlocks().stream().map(block -> block.getName().getString()).collect(Collectors.joining(", ")))))))
+                                    .withStyle(style -> style.withBold(true)));
                         }
-                        if (value instanceof PositionBlock.BlockValue)
-                            component.append(new TranslatableComponent("text.multiblockmachine.accept.block", value.getBlocks().get(0).getName()));
-
-                        if (valueIterator.hasNext())
-                            component.append("\n");
+                        if (value instanceof PositionBlock.BlockValue){
+                            component.append(block(value.getBlocks().get(0)));
+                        }
                     }
+                } else {
+                    component.append("\n");
+                    component.append(block(instructionBlockEntity.getSpecial().getBlock()));
                 }
-
                 player.sendMessage(new TranslatableComponent("text.multiblockmachine.accept", component), Util.NIL_UUID);
             }
         }
 
         return InteractionResult.PASS;
+    }
+
+    private Component block(Block block){
+        return new TranslatableComponent("text.multiblockmachine.accept.block", block.getName().withStyle(style -> style
+                .withBold(false)
+                .withUnderlined(true)
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(Registry.BLOCK.getKey(block).toString())))))
+                .withStyle(style -> style.withBold(true));
     }
 
     @Override
@@ -100,13 +100,27 @@ public class InstructionBlock extends Block implements EntityBlock {
 
 
     @Override
+    public ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
+        BlockEntity blockEntity = getter.getBlockEntity(pos);
+        if(blockEntity instanceof InstructionBlockEntity)
+            return new ItemStack(((InstructionBlockEntity) blockEntity).getMimic().getBlock().asItem());
+        return ItemStack.EMPTY;
+    }
+
+    @Override
     public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.INVISIBLE;
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockGetter blockGetter) {
-        return new InstructionBlockEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new InstructionBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return Utils.getTicker(level.isClientSide);
     }
 }

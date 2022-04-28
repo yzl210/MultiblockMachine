@@ -7,9 +7,13 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 public class ControllerScreen extends BaseScreen<ControllerMenu> {
+
+    private static final DecimalFormat format = new DecimalFormat("0.##");
+
     public ControllerScreen(ControllerMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
     }
@@ -17,7 +21,7 @@ public class ControllerScreen extends BaseScreen<ControllerMenu> {
     @Override
     protected void renderLabels(PoseStack poseStack, int x, int y) {
         super.renderLabels(poseStack, x, y);
-        String progress = I18n.get("text.multiblockmachine.controller.progress", menu.getBlockEntity().getProgress() + "%");
+        String progress = I18n.get("text.multiblockmachine.controller.progress", format.format(menu.getBlockEntity().getProgress()) + "%");
         Minecraft.getInstance().font.draw(poseStack, progress, getCenteredOffset(progress), 20, 0x404040);
         String status = I18n.get("text.multiblockmachine.controller.status",
                 I18n.get("text.multiblockmachine.controller.status." + menu.getBlockEntity().getStatus().name().toLowerCase(Locale.ROOT)));

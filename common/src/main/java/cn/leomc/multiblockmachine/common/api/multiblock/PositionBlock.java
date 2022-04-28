@@ -4,17 +4,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import me.shedaniel.architectury.hooks.TagHooks;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class PositionBlock implements Predicate<Block> {
@@ -144,22 +147,27 @@ public class PositionBlock implements Predicate<Block> {
     }
 
     public static class TagValue implements Value {
-        private final Tag.Named<Block> tag;
+        private final Optional<HolderSet.Named<Block>> tag;
         private final ResourceLocation id;
 
         public TagValue(ResourceLocation id) {
-            this.tag = TagHooks.getBlockOptional(id);
+            this.tag = Registry.BLOCK.getTag(TagKey.create(Registry.BLOCK_REGISTRY, id));
             this.id = id;
         }
 
         @Override
         public List<Block> getBlocks() {
-            return tag == null ? Collections.emptyList() : tag.getValues();
+            return tag.isPresent() ? tag.get().stream().map(Holder::value).toList() : Collections.emptyList();
         }
 
-        public Tag.Named<Block> getTag() {
+        public Optional<HolderSet.Named<Block>> getTag() {
             return tag;
         }
+
+        public ResourceLocation getId() {
+            return id;
+        }
+
 
         @Override
         public CompoundTag save() {

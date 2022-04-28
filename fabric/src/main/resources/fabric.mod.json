@@ -21,18 +21,18 @@
     "main": [
       "cn.leomc.multiblockmachine.fabric.MultiblockMachineFabric"
     ],
-    "rei_plugins": [
-      "cn.leomc.multiblockmachine.fabric.client.compat.rei.REIPlugin"
+    "rei": [
+      "cn.leomc.multiblockmachine.fabric.compat.rei.ReiClientPlugin"
     ],
     "modmenu": [
-      "cn.leomc.multiblockmachine.fabric.client.compat.modmenu.ModMenuCompat"
+      "cn.leomc.multiblockmachine.fabric.compat.modmenu.ModMenuCompat"
     ]
   },
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": ">=1.16.4",
-    "architectury": ">=1.1.55",
-    "cloth-config2": ">=4.9"
+    "minecraft": ">=1.18.1",
+    "architectury": ">=3.7.26",
+    "cloth-config2": ">=6.2.5.7"
   }
 }

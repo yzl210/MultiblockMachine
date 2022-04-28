@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "multiblockmachine:controller",
+    "multiblockmachine:item_input_slot",
+    "multiblockmachine:item_output_slot",
+    "multiblockmachine:fluid_input_slot",
+    "multiblockmachine:fluid_output_slot",
+    "multiblockmachine:energy_input_slot",
+    "multiblockmachine:energy_output_slot"
+  ]
+}

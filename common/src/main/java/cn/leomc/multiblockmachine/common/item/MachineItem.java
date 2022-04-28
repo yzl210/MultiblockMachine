@@ -8,12 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +43,7 @@ public class MachineItem extends Item {
 
             if(context.getPlayer().isShiftKeyDown())
                 MultiblockStructures.buildStructure(structure, (ServerLevel) context.getLevel(), pos, context.getHorizontalDirection().getOpposite());
-            else
+            //else
                 MultiblockStructures.buildStructureInstruction(structure, (ServerLevel) context.getLevel(), pos, context.getHorizontalDirection().getOpposite());
         }
 
@@ -65,9 +63,20 @@ public class MachineItem extends Item {
     }
 
     @Override
+    public Component getName(ItemStack itemStack) {
+        return valid(itemStack) ? new TranslatableComponent("item.multiblockmachine.machine_item_has_structure",
+                MultiblockStructures.getStructureName(new ResourceLocation(itemStack.getOrCreateTag().getString("machine"))).withStyle(ChatFormatting.GRAY))
+                : new TranslatableComponent("item.multiblockmachine.machine_item");
+    }
+
+    @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         if (itemStack.getItem() instanceof MachineItem && itemStack.getOrCreateTag().contains("machine"))
             list.add(MultiblockStructures.getStructureName(new ResourceLocation(itemStack.getOrCreateTag().getString("machine"))).withStyle(ChatFormatting.GRAY));
+    }
+
+    public static boolean valid(ItemStack itemStack){
+        return itemStack.getItem() instanceof MachineItem && itemStack.hasTag() && itemStack.getTag().contains("machine");
     }
 
 }

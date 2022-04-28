@@ -2,14 +2,13 @@ package cn.leomc.multiblockmachine.common.block.energyslot;
 
 import cn.leomc.multiblockmachine.common.blockentity.energyslot.EnergyOutputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.utils.PlatformSpecific;
-import me.shedaniel.architectury.registry.MenuRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class EnergyOutputSlotBlock extends EnergySlotBlock implements EntityBlock {
 
-    public static EnergyOutputSlotBlockEntity getBlockEntity() {
-        return (EnergyOutputSlotBlockEntity) PlatformSpecific.getBlockEntity("EnergyOutputSlot");
+    public static EnergyOutputSlotBlockEntity getBlockEntity(BlockPos pos, BlockState state) {
+        return (EnergyOutputSlotBlockEntity) PlatformSpecific.getBlockEntity(PlatformSpecific.BlockEntities.ENERGY_OUTPUT_SLOT, pos, state);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class EnergyOutputSlotBlock extends EnergySlotBlock implements EntityBloc
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockGetter blockGetter) {
-        return getBlockEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return getBlockEntity(pos, state);
     }
 }

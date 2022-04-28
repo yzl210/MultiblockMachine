@@ -3,6 +3,7 @@ package cn.leomc.multiblockmachine.common.api;
 import com.google.common.collect.Lists;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -43,10 +44,9 @@ public class MultipleContainer implements Container {
 
     @Override
     public boolean isEmpty() {
-        for (Container container : containers)
-            if (!container.isEmpty())
-                return false;
-        return true;
+        return containers
+                .stream()
+                .allMatch(Container::isEmpty);
     }
 
     @Override
@@ -222,10 +222,20 @@ public class MultipleContainer implements Container {
 
     }
 
-
     public List<Container> getContainers() {
         return containers;
     }
 
+    public MultipleContainer copy(){
+        return new MultipleContainer(containers
+                .stream()
+                .map(container -> {
+                    Container sc = new SimpleContainer(container.getContainerSize());
+                    for (int i = 0; i < container.getContainerSize(); i++)
+                        sc.setItem(i, container.getItem(i).copy());
+                    return sc;
+                })
+                .toList());
+    }
 
 }

@@ -1,5 +1,6 @@
 package cn.leomc.multiblockmachine.common.api;
 
+
 public class DoubleLong {
 
     public long longValue = 0;

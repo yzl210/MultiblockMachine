@@ -3,7 +3,7 @@ package cn.leomc.multiblockmachine.common.network.packet;
 import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.api.multiblock.MultiblockStructure;
 import cn.leomc.multiblockmachine.common.api.multiblock.MultiblockStructures;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -34,19 +34,16 @@ public class SyncStructuresMessage {
     }
 
     public static SyncStructuresMessage decode(FriendlyByteBuf buf) {
-        return new SyncStructuresMessage(buf.readAnySizeNbt());
+        return new SyncStructuresMessage(buf.readNbt());
     }
 
 
     public static void handle(SyncStructuresMessage message, Supplier<NetworkManager.PacketContext> supplier) {
-        MultiblockMachine.LOGGER.info(message.tag.toString());
         MultiblockStructures.INSTANCE.MACHINES.clear();
         for (Tag t : message.tag.getList("structures", 10)) {
             CompoundTag tag = (CompoundTag) t;
             MultiblockStructure structure = MultiblockStructure.of(tag);
             MultiblockStructures.INSTANCE.MACHINES.put(new ResourceLocation(tag.getString("id")), structure);
-            MultiblockMachine.LOGGER.info("Added: " + structure.getId());
         }
-        MultiblockMachine.LOGGER.info("total: " + MultiblockStructures.INSTANCE.MACHINES.size());
     }
 }

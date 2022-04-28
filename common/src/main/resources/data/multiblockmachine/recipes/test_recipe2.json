@@ -3,17 +3,26 @@
   "machine": "multiblockmachine:testmachine1",
   "inputs": [
     {
+      "type": "energy",
+      "ingredient": {
+        "amount": 10000000
+      }
+    },
+    {
+      "type": "item",
       "ingredient": {
         "item": "minecraft:cobblestone"
       }
     },
     {
+      "type": "item",
       "ingredient": {
         "item": "minecraft:coal"
       },
       "count": 2
     },
     {
+      "type": "item",
       "ingredient": {
         "item": "minecraft:stone"
       },
@@ -31,6 +40,5 @@
       "amount": 100000
     }
   ],
-  "energy": 10000000,
   "energyMaxInput": 5000
 }

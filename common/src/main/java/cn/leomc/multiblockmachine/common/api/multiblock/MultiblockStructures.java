@@ -2,7 +2,6 @@ package cn.leomc.multiblockmachine.common.api.multiblock;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.block.ControllerBlock;
-import cn.leomc.multiblockmachine.common.block.InstructionBlock;
 import cn.leomc.multiblockmachine.common.blockentity.InstructionBlockEntity;
 import cn.leomc.multiblockmachine.common.network.NetworkHandler;
 import cn.leomc.multiblockmachine.common.registry.BlockRegistry;
@@ -13,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.MutableComponent;
@@ -41,9 +41,6 @@ public enum MultiblockStructures implements ResourceManagerReloadListener {
 
     public final HashMap<ResourceLocation, MultiblockStructure> MACHINES = new HashMap<>();
 
-    @Environment(EnvType.CLIENT)
-    public final List<Pair<BlockPos, MultiblockStructure>> RENDERING = new ArrayList<>();
-
     // public static MultiblockStructure TESTSTRUCTURE = new MultiblockStructure(new ResourceLocation("multiblockmachine", "test"), new HashMap<>())
     //       .addBlock(new BlockPos(1, 0, 0), new PositionBlock(Blocks.IRON_BLOCK))
     //     .addBlock(new BlockPos(0, 0, 1), new PositionBlock(Blocks.DIAMOND_BLOCK))
@@ -52,11 +49,9 @@ public enum MultiblockStructures implements ResourceManagerReloadListener {
 
     @Nullable
     public static MultiblockStructure getFormedStructure(Level level, BlockPos origin, Direction facing) {
-        for (MultiblockStructure structure : INSTANCE.MACHINES.values()) {
-            if (structure.isFormed(level, origin, facing)) {
+        for (MultiblockStructure structure : INSTANCE.MACHINES.values())
+            if (structure.isFormed(level, origin, facing))
                 return structure;
-            }
-        }
         return null;
     }
 
@@ -84,10 +79,10 @@ public enum MultiblockStructures implements ResourceManagerReloadListener {
 
     public static void buildStructureInstruction(MultiblockStructure structure, ServerLevel level, BlockPos pos, Direction direction){
         if(level.getBlockState(pos).isAir()) {
-            level.setBlockAndUpdate(pos, BlockRegistry.INSTRUCTION_BLOCK.get().defaultBlockState());
-            BlockEntity entity = level.getBlockEntity(pos);
-            if (entity instanceof InstructionBlockEntity)
-                ((InstructionBlockEntity) entity).setSpecial(BlockRegistry.CONTROLLER.get().defaultBlockState().setValue(ControllerBlock.FACING, direction));
+            if(level.setBlockAndUpdate(pos, BlockRegistry.INSTRUCTION_BLOCK.get().defaultBlockState()) &&
+                    level.getBlockEntity(pos) instanceof InstructionBlockEntity blockEntity) {
+                blockEntity.setSpecial(BlockRegistry.CONTROLLER.get().defaultBlockState().setValue(ControllerBlock.FACING, direction));
+            }
             level.getChunkSource().blockChanged(pos);
         }
         for (Map.Entry<BlockPos, PositionBlock> entry : structure.getBlocks().entrySet()) {
@@ -96,10 +91,10 @@ public enum MultiblockStructures implements ResourceManagerReloadListener {
             if(!level.getBlockState(blockPos).isAir())
                 continue;
 
-            level.setBlockAndUpdate(blockPos, BlockRegistry.INSTRUCTION_BLOCK.get().defaultBlockState());
-            BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            if(blockEntity instanceof InstructionBlockEntity)
-                ((InstructionBlockEntity) blockEntity).setBlock(entry.getValue());
+            if(level.setBlockAndUpdate(blockPos, BlockRegistry.INSTRUCTION_BLOCK.get().defaultBlockState()) &&
+                    level.getBlockEntity(blockPos) instanceof InstructionBlockEntity blockEntity) {
+                blockEntity.setBlock(entry.getValue());
+            }
             level.getChunkSource().blockChanged(blockPos);
         }
     }
@@ -109,28 +104,26 @@ public enum MultiblockStructures implements ResourceManagerReloadListener {
         BlockPos.MutableBlockPos offset = new BlockPos.MutableBlockPos();
 
         switch (direction) {
-            case EAST:
+            case EAST -> {
                 offset.setX(-pos.getZ());
                 offset.setY(pos.getY());
                 offset.setZ(-pos.getX());
-                break;
-            case WEST:
+            }
+            case WEST -> {
                 offset.setX(pos.getZ());
                 offset.setY(pos.getY());
                 offset.setZ(pos.getX());
-                break;
-            case SOUTH:
+            }
+            case SOUTH -> {
                 offset.setX(pos.getX());
                 offset.setY(pos.getY());
                 offset.setZ(-pos.getZ());
-                break;
-            case NORTH:
+            }
+            case NORTH -> {
                 offset.setX(-pos.getX());
                 offset.setY(pos.getY());
                 offset.setZ(pos.getZ());
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + direction);
+            }
         }
         return offset;
     }

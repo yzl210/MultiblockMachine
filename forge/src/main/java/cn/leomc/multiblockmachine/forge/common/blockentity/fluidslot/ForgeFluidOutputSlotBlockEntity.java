@@ -1,9 +1,10 @@
 package cn.leomc.multiblockmachine.forge.common.blockentity.fluidslot;
 
-import cn.leomc.multiblockmachine.common.blockentity.fluidslot.FluidInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.fluidslot.FluidOutputSlotBlockEntity;
-import cn.leomc.multiblockmachine.forge.api.FluidTank;
+import cn.leomc.multiblockmachine.forge.api.FluidHandler;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -13,7 +14,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class ForgeFluidOutputSlotBlockEntity extends FluidOutputSlotBlockEntity {
 
-    protected LazyOptional<IFluidHandler> optional = LazyOptional.of(() -> new FluidTank(fluid));
+    protected LazyOptional<IFluidHandler> optional = LazyOptional.of(() -> new FluidHandler(fluid));
+
+    public ForgeFluidOutputSlotBlockEntity(BlockPos pos, BlockState state) {
+        super(pos, state);
+    }
 
     @NotNull
     @Override

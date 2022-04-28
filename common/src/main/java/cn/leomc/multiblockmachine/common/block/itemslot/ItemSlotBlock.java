@@ -1,8 +1,7 @@
 package cn.leomc.multiblockmachine.common.block.itemslot;
 
 import cn.leomc.multiblockmachine.common.api.IItemSlot;
-import me.shedaniel.architectury.registry.BlockProperties;
-import me.shedaniel.architectury.registry.ToolType;
+import dev.architectury.registry.block.BlockProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,11 +14,11 @@ import net.minecraft.world.level.material.Material;
 public abstract class ItemSlotBlock extends Block implements EntityBlock {
     public ItemSlotBlock() {
         super(
-                BlockProperties.of(Material.METAL)
-                        .tool(ToolType.PICKAXE, 2)
+                Properties.of(Material.METAL)
                         .requiresCorrectToolForDrops()
                         .strength(3, 5)
                         .sound(SoundType.METAL)
+
         );
     }
 

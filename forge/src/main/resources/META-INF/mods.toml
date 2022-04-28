@@ -1,6 +1,6 @@
 modLoader = "javafml"
-loaderVersion = "[35,)"
-#issueTrackerURL = ""
+loaderVersion = "[39,)"
+issueTrackerURL = "https://www.github.com/yzl210/MultiblockMachine/issues"
 license = "GNU GPLv3"
 
 [[mods]]
@@ -15,27 +15,27 @@ description = '''
 [[dependencies.multiblockmachine]]
 modId = "forge"
 mandatory = true
-versionRange = "[35,)"
+versionRange = "[39,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.multiblockmachine]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.4,)"
+versionRange = "[1.18.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.multiblockmachine]]
 modId = "architectury"
 mandatory = true
-versionRange = "[1.1.55,)"
+versionRange = "[3.7.26,)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.multiblockmachine]]
-modId = "cloth-config"
+modId = "cloth_config"
 mandatory = true
-versionRange = "[4.9,)"
+versionRange = "[6.2.5.7,)"
 ordering = "AFTER"
 side = "BOTH"

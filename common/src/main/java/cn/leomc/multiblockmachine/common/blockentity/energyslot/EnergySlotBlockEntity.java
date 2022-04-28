@@ -1,41 +1,29 @@
 package cn.leomc.multiblockmachine.common.blockentity.energyslot;
 
-import cn.leomc.multiblockmachine.common.api.DoubleLong;
 import cn.leomc.multiblockmachine.common.api.IEnergyHandler;
 import cn.leomc.multiblockmachine.common.api.IEnergySlot;
 import cn.leomc.multiblockmachine.common.blockentity.UpgradableBlockEntity;
 import cn.leomc.multiblockmachine.common.menu.energyslot.EnergySlotMenu;
-import me.shedaniel.architectury.extensions.BlockEntityExtension;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class EnergySlotBlockEntity extends UpgradableBlockEntity implements MenuProvider, IEnergySlot, BlockEntityExtension, TickableBlockEntity {
+public abstract class EnergySlotBlockEntity extends UpgradableBlockEntity implements MenuProvider, IEnergySlot {
 
     protected IEnergyHandler handler;
 
-    @Environment(EnvType.CLIENT)
-    private DoubleLong clientEnergy;
-
-    public EnergySlotBlockEntity(BlockEntityType<?> blockEntityType) {
-        super(blockEntityType);
+    public EnergySlotBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+        super(blockEntityType, pos, state);
         handler = createEnergyHandler();
-    }
-
-    @Override
-    public void tick() {
-        if (level.isClientSide)
-            return;
-        syncData();
     }
 
     public IEnergyHandler getEnergyHandler() {
@@ -51,30 +39,25 @@ public abstract class EnergySlotBlockEntity extends UpgradableBlockEntity implem
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
-        super.load(state, tag);
-        handler.setEnergyStored(DoubleLong.of(tag.getDouble("energy")));
+    public void load(CompoundTag tag) {
+        handler.setEnergyStored(tag.getLong("energy"));
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
-        tag.putDouble("energy", handler.getEnergy().doubleValue);
-        return super.save(tag);
+    public void saveAdditional(CompoundTag tag) {
+        tag.putLong("energy", handler.getEnergy());
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void loadClientData(BlockState state, CompoundTag tag) {
-        clientEnergy = DoubleLong.of(tag.getDouble("energy"));
-    }
-
-    @Override
-    public CompoundTag saveClientData(CompoundTag tag) {
-        tag.putDouble("energy", handler.getEnergy().doubleValue);
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = new CompoundTag();
+        saveAdditional(tag);
         return tag;
-    }
-
-    @Environment(EnvType.CLIENT)
-    public DoubleLong getEnergyClient() {
-        return clientEnergy;
     }
 }

@@ -26,6 +26,8 @@ public class Textures {
 
     public static Supplier<TextureAtlasSprite> ARROW_DOWN = register("gui/arrow_down");
 
+    public static Supplier<TextureAtlasSprite> BUTTON = register("gui/button");
+
 
     //public static Supplier<TextureAtlasSprite> HORIZONTAL_FLUID_TANK = register("gui/horizontal_fluid_tank");
 

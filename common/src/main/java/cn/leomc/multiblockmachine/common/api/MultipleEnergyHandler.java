@@ -17,59 +17,65 @@ public class MultipleEnergyHandler implements IEnergyHandler {
     }
 
     @Override
-    public DoubleLong receiveEnergy(DoubleLong maxReceive, boolean simulate, boolean force) {
+    public long receiveEnergy(long maxReceive, boolean simulate, boolean force) {
         if (!force && !canReceive())
-            return DoubleLong.of(0);
+            return 0;
 
-        DoubleLong totalReceived = DoubleLong.of(0);
+        long totalReceived = 0;
+        long max = maxReceive;
         for (IEnergyHandler handler : handlers) {
-            totalReceived.add(handler.receiveEnergy(maxReceive, simulate, force));
-            if (totalReceived.doubleValue >= maxReceive.doubleValue)
+            long received = handler.receiveEnergy(max, simulate, force);
+            totalReceived += received;
+            max -= received;
+            if (totalReceived >= maxReceive || max <= 0)
                 break;
         }
         return totalReceived;
     }
 
     @Override
-    public DoubleLong extractEnergy(DoubleLong maxExtract, boolean simulate, boolean force) {
+    public long extractEnergy(long maxExtract, boolean simulate, boolean force) {
         if (!force && !canExtract())
-            return DoubleLong.of(0);
+            return 0;
 
-        DoubleLong totalExtracted = DoubleLong.of(0);
+        long totalExtracted = 0;
+        long max = maxExtract;
         for (IEnergyHandler handler : handlers) {
-            totalExtracted.add(handler.extractEnergy(maxExtract, simulate, force));
-            if (totalExtracted.doubleValue >= maxExtract.doubleValue)
+            long extracted = handler.extractEnergy(max, simulate, force);
+            totalExtracted += extracted;
+            max -= extracted;
+            if (totalExtracted >= maxExtract || max <= 0)
                 break;
         }
         return totalExtracted;
     }
 
     @Override
-    public void setEnergyStored(DoubleLong energy) {
+    public void setEnergyStored(long energy) {
         for (IEnergyHandler handler : handlers)
-            handler.setEnergyStored(DoubleLong.of(0));
+            handler.setEnergyStored(0);
 
-        DoubleLong remain = DoubleLong.of(energy);
+        long remain = energy;
         for (IEnergyHandler handler : handlers) {
-            remain.subtract(handler.receiveEnergy(remain, false, true));
-            if (remain.doubleValue <= 0)
+            remain -= handler.receiveEnergy(remain, false, true);
+            if (remain <= 0)
                 break;
         }
     }
 
     @Override
-    public DoubleLong getEnergy() {
-        DoubleLong energy = DoubleLong.of(0);
+    public long getEnergy() {
+        long energy = 0;
         for (IEnergyHandler handler : handlers)
-            energy.add(handler.getEnergy());
+            energy += handler.getEnergy();
         return energy;
     }
 
     @Override
-    public DoubleLong getMaxEnergy() {
-        DoubleLong maxEnergy = DoubleLong.of(0);
+    public long getMaxEnergy() {
+        long maxEnergy = 0;
         for (IEnergyHandler handler : handlers)
-            maxEnergy.add(handler.getEnergy());
+            maxEnergy += handler.getEnergy();
         return maxEnergy;
     }
 
@@ -87,6 +93,14 @@ public class MultipleEnergyHandler implements IEnergyHandler {
             if (handler.canReceive())
                 return true;
         return false;
+    }
+
+    @Override
+    public MultipleEnergyHandler copy() {
+        return new MultipleEnergyHandler(handlers
+                .stream()
+                .map(IEnergyHandler::copy)
+                .toList());
     }
 
 }

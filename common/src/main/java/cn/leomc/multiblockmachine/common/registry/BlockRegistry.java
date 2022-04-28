@@ -2,6 +2,7 @@ package cn.leomc.multiblockmachine.common.registry;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.block.ControllerBlock;
+import cn.leomc.multiblockmachine.common.block.CreativeEnergySourceBlock;
 import cn.leomc.multiblockmachine.common.block.InstructionBlock;
 import cn.leomc.multiblockmachine.common.block.energyslot.EnergyInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.energyslot.EnergyOutputSlotBlock;
@@ -9,8 +10,9 @@ import cn.leomc.multiblockmachine.common.block.fluidslot.FluidInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.fluidslot.FluidOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemOutputSlotBlock;
-import me.shedaniel.architectury.registry.DeferredRegister;
-import me.shedaniel.architectury.registry.RegistrySupplier;
+import cn.leomc.multiblockmachine.common.blockentity.CreativeEnergySourceBlockEntity;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.Block;
 
@@ -19,6 +21,10 @@ import java.util.function.Supplier;
 public class BlockRegistry {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MultiblockMachine.MODID, Registry.BLOCK_REGISTRY);
+
+
+    public static final RegistrySupplier<Block> CREATIVE_ENERGY_SOURCE = register("creative_energy_source", CreativeEnergySourceBlock::new);
+
 
     public static final RegistrySupplier<Block> CONTROLLER = register("controller", ControllerBlock::new);
 

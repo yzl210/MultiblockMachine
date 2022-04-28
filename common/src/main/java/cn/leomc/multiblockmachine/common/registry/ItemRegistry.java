@@ -2,8 +2,8 @@ package cn.leomc.multiblockmachine.common.registry;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
 import cn.leomc.multiblockmachine.common.item.MachineItem;
-import me.shedaniel.architectury.registry.DeferredRegister;
-import me.shedaniel.architectury.registry.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -16,6 +16,9 @@ public class ItemRegistry {
 
 
     public static RegistrySupplier<Item> MACHINE_ITEM = register("machine_item", MachineItem::new);
+
+    public static RegistrySupplier<Item> CREATIVE_ENERGY_SOURCE = register("creative_energy_source", () -> new BlockItem(BlockRegistry.CREATIVE_ENERGY_SOURCE.get(), new Item.Properties().tab(ModRegistry.TAB)));
+
 
     public static RegistrySupplier<Item> CONTROLLER = register("controller", () -> new BlockItem(BlockRegistry.CONTROLLER.get(), new Item.Properties().tab(ModRegistry.TAB)));
 

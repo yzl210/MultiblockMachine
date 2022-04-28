@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "multiblockmachine:fluid_input_slot",
+    "multiblockmachine:fluid_output_slot"
+  ]
+}

@@ -8,6 +8,7 @@
   "block.multiblockmachine.fluid_input_slot": "流体输入槽",
   "block.multiblockmachine.fluid_output_slot": "流体输出槽",
   "item.multiblockmachine.machine_item": "多方块机器",
+  "item.multiblockmachine.machine_item_has_structure": "多方块机器 (%s)",
   "container.multiblockmachine.item_input_slot": "物品输入槽",
   "container.multiblockmachine.item_output_slot": "物品输出槽",
   "container.multiblockmachine.energy_input_slot": "能量输入槽",
@@ -24,9 +25,11 @@
   "text.multiblockmachine.controller.status.output_full": "输出已满",
   "text.multiblockmachine.controller.status.no_energy": "能量不足",
   "text.multiblockmachine.controller.status.not_formed": "你不应该看到这个！请报告给我！",
-  "text.multiblockmachine.accept": "接受以下任意(鼠标悬浮查看标签): %s",
+  "text.multiblockmachine.accept": "接受以下任意方块(鼠标悬浮查看标签): %s",
   "text.multiblockmachine.accept.tag": "标签: %s",
   "text.multiblockmachine.accept.block": "方块: %s",
+  "text.multiblockmachine.show_structure": "展示结构",
+  "text.multiblockmachine.build_instruction_category": "建造指示",
   "text.autoconfig.multiblockmachine.title": "多方块机器配置",
   "text.autoconfig.multiblockmachine.category.common": "常规",
   "text.autoconfig.multiblockmachine.option.common.controller": "控制器",
@@ -38,5 +41,11 @@
   "text.autoconfig.multiblockmachine.option.common.energy_output_slot.capacity": "能量输出槽容量",
   "text.autoconfig.multiblockmachine.option.common.energy_output_slot.output": "能量输出槽输出速率",
   "text.autoconfig.multiblockmachine.category.client": "客户端",
-  "itemGroup.multiblockmachine.default": "多方块机器"
+  "itemGroup.multiblockmachine.default": "多方块机器",
+  "text.multiblockmachine.additional_inputs": "附加输入",
+  "text.multiblockmachine.ingredient.empty": "空",
+  "text.multiblockmachine.ingredient.energy": "能量: %s %s",
+  "text.multiblockmachine.show_instruction": "右键一个方块以展示建造指示",
+  "text.multiblockmachine.additional_outputs": "额外输出",
+  "text.multiblockmachine.ingredient.energy_max_input": "(%s %s/t)"
 }

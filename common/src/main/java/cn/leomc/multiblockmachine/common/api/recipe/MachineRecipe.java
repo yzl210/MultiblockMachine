@@ -1,19 +1,16 @@
 package cn.leomc.multiblockmachine.common.api.recipe;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
-import cn.leomc.multiblockmachine.common.api.DoubleLong;
-import cn.leomc.multiblockmachine.common.api.IngredientExtension;
+import cn.leomc.multiblockmachine.common.api.FakeContainer;
+import cn.leomc.multiblockmachine.common.api.IFluidHandler;
+import cn.leomc.multiblockmachine.common.api.MultipleContainer;
 import cn.leomc.multiblockmachine.common.api.multiblock.MultiblockStructure;
 import cn.leomc.multiblockmachine.common.api.multiblock.MultiblockStructures;
 import cn.leomc.multiblockmachine.common.registry.BlockRegistry;
-import cn.leomc.multiblockmachine.common.utils.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
-import me.shedaniel.architectury.fluid.FluidStack;
-import me.shedaniel.architectury.utils.Fraction;
+import dev.architectury.fluid.FluidStack;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -26,76 +23,70 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class MachineRecipe implements Recipe<Container> {
+public class MachineRecipe implements Recipe<FakeContainer> {
 
     private final ResourceLocation id;
     private final ResourceLocation machineID;
-    private final List<Pair<Ingredient, Integer>> inputs;
-    private final List<RecipeIngredient> results;
-    private final List<ItemStack> itemResults;
+    private final List<RecipeIngredient> inputs;
+    private final List<RecipeIngredient> itemInputs;
+    private final List<RecipeIngredient> fluidInputs;
+    private final List<RecipeResult> results;
+    private final List<RecipeResult> itemResults;
+    private final List<RecipeResult> fluidResults;
     private final long time;
-    private final DoubleLong energy;
-    private final DoubleLong energyMaxInput;
+    private final long energy;
+    private final long energyMaxInput;
     private final boolean outputEnergy;
-    private final DoubleLong totalOutput;
+    private final long totalOutput;
 
-    public MachineRecipe(ResourceLocation id, ResourceLocation machineID, List<Pair<Ingredient, Integer>> inputs, List<RecipeIngredient> results, long time) {
-        this(id, machineID, inputs, results, time, DoubleLong.of(0));
+    public MachineRecipe(ResourceLocation id, ResourceLocation machineID, List<RecipeIngredient> inputs, List<RecipeResult> results, long time) {
+        this(id, machineID, inputs, results, time, 0);
     }
 
-    public MachineRecipe(ResourceLocation id, ResourceLocation machineID, List<Pair<Ingredient, Integer>> inputs, List<RecipeIngredient> results, long time, DoubleLong energy) {
-        this(id, machineID, inputs, results, time, energy, DoubleLong.of(energy));
-    }
-
-    public MachineRecipe(ResourceLocation id, ResourceLocation machineID, List<Pair<Ingredient, Integer>> inputs, List<RecipeIngredient> results, long time, DoubleLong energy, DoubleLong energyMaxInput) {
+    public MachineRecipe(ResourceLocation id, ResourceLocation machineID, List<RecipeIngredient> inputs, List<RecipeResult> results, long time, long energyMaxInput) {
         this.id = id;
         this.machineID = machineID;
         this.inputs = inputs;
+        this.itemInputs = inputs.stream().filter(ingredient -> ingredient.getType() == IngredientType.ITEM).toList();
+        this.fluidInputs = inputs.stream().filter(ingredient -> ingredient.getType() == IngredientType.FLUID).toList();
         this.results = results;
         this.time = time;
-        this.energy = energy;
-        this.energyMaxInput = energyMaxInput;
-        this.outputEnergy = results.stream().anyMatch(ingredient -> ingredient.getType() == RecipeIngredient.ResultType.ENERGY);
-        this.totalOutput = DoubleLong.of(results.stream().filter(ingredient -> ingredient.getType() == RecipeIngredient.ResultType.ENERGY).map(RecipeIngredient::getEnergy).mapToDouble(value -> value.doubleValue).sum());
-        this.itemResults = results.stream().filter(ingredient -> ingredient.getType() == RecipeIngredient.ResultType.ITEM).map(RecipeIngredient::getItem).collect(Collectors.toList());
+        this.energy = inputs.stream().filter(ingredient -> ingredient.getType() == IngredientType.ENERGY).map(RecipeIngredient::getEnergy).mapToLong(value -> value).sum();
+        this.energyMaxInput = energyMaxInput < 1 ? energy : energyMaxInput;
+        this.outputEnergy = results.stream().anyMatch(result -> result.getType() == IngredientType.ENERGY);
+        this.totalOutput = results.stream().filter(result -> result.getType() == IngredientType.ENERGY).map(RecipeResult::getEnergy).mapToLong(value -> value).sum();
+        this.itemResults = results.stream().filter(result -> result.getType() == IngredientType.ITEM).toList();
+        this.fluidResults = results.stream().filter(result -> result.getType() == IngredientType.FLUID).toList();
     }
 
     @Override
-    public boolean matches(Container original, Level level) {
-
-        SimpleContainer container = new SimpleContainer(original.getContainerSize());
-
-        for (int i = 0; i < original.getContainerSize(); i++)
-            container.addItem(original.getItem(i).copy());
-
-
+    public boolean matches(FakeContainer fakeContainer, Level level) {
         MultiblockStructure structure = MultiblockStructures.getStructure(machineID);
         if (structure == null) {
             MultiblockMachine.LOGGER.warn("Machine not found for recipe: " + id.toString());
             return false;
         }
-        for (Pair<Ingredient, Integer> pair : inputs) {
-            boolean has = container.hasAnyOf(Arrays.stream(((IngredientExtension) (Object) pair.getFirst()).getItemsServer()).map(ItemStack::getItem).collect(Collectors.toSet()));
+
+        SimpleContainer items = fakeContainer.getSimpleContainer();
+
+        for (RecipeIngredient input : itemInputs) {
+            boolean has = items.hasAnyOf(Arrays.stream(input.getItem().getItems()).map(ItemStack::getItem).collect(Collectors.toSet()));
             if (!has)
                 return false;
         }
 
-
-        for (Pair<Ingredient, Integer> pair : inputs) {
+        for (RecipeIngredient input : itemInputs) {
             int removed = 0;
             boolean enough = false;
-            for (ItemStack item : ((IngredientExtension) (Object) pair.getFirst()).getItemsServer()) {
-                removed += container.removeItemType(item.getItem(), pair.getSecond() - removed).getCount();
-                if (removed >= pair.getSecond()) {
+            for (ItemStack item : input.getItem().getItems()) {
+                removed += items.removeItemType(item.getItem(), ((int) input.getAmount()) - removed).getCount();
+                if (removed >= input.getAmount()) {
                     enough = true;
                     break;
                 }
@@ -103,11 +94,32 @@ public class MachineRecipe implements Recipe<Container> {
             if (!enough)
                 return false;
         }
+
+        IFluidHandler fluids = fakeContainer.getFluidHandler();
+
+
+        if(fluidInputs.isEmpty())
+            return true;
+
+        outer:
+        for (RecipeIngredient input : fluidInputs) {
+            long removed = 0;
+            for (Fluid fluid : input.getFluid().getFluids()) {
+                for(int i = 0;i < fluids.getSize();i++){
+                    removed += fluids.extractFluid(i, FluidStack.create(fluid, input.getIntAmount() - removed), false, false);
+                    if (removed >= input.getAmount()) {
+                        continue outer;
+                    }
+                }
+            }
+            return false;
+        }
+
         return true;
     }
 
     @Override
-    public ItemStack assemble(Container container) {
+    public ItemStack assemble(FakeContainer container) {
         return ItemStack.EMPTY;
     }
 
@@ -139,12 +151,14 @@ public class MachineRecipe implements Recipe<Container> {
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.create();
-        ingredients.addAll(inputs.stream().map(Pair::getFirst).collect(Collectors.toList()));
+        ingredients.addAll(inputs.stream()
+                .filter(ingredient -> ingredient.getType() == IngredientType.ITEM)
+                .map(RecipeIngredient::getItem).toList());
         return ingredients;
     }
 
     @Override
-    public RecipeType getType() {
+    public RecipeType<?> getType() {
         return MachineRecipeType.INSTANCE;
     }
 
@@ -152,20 +166,34 @@ public class MachineRecipe implements Recipe<Container> {
         return machineID;
     }
 
-    public List<Pair<Ingredient, Integer>> getInputs() {
+    public List<RecipeIngredient> getInputs() {
         return inputs;
     }
 
-    public List<RecipeIngredient> getResults() {
+    public List<RecipeIngredient> getItemInputs() {
+        return itemInputs;
+    }
+
+
+    public List<RecipeIngredient> getFluidInputs() {
+        return fluidInputs;
+    }
+
+
+    public List<RecipeResult> getResults() {
         return results;
     }
 
-    public List<ItemStack> getItemResults() {
+    public List<RecipeResult> getItemResults() {
         return itemResults;
     }
 
+    public List<RecipeResult> getFluidResults() {
+        return fluidResults;
+    }
+
     public boolean requireEnergy() {
-        return energy.doubleValue > 0 && energyMaxInput.doubleValue > 0;
+        return energy > 0 && energyMaxInput > 0;
     }
 
     public boolean outputEnergy() {
@@ -177,18 +205,18 @@ public class MachineRecipe implements Recipe<Container> {
     }
 
     public long getProcessTime() {
-        return requireEnergy() ? (long) (energy.doubleValue / energyMaxInput.doubleValue) : getTime();
+        return requireEnergy() ? (energy / energyMaxInput) : getTime();
     }
 
-    public DoubleLong getEnergy() {
-        return DoubleLong.of(energy);
+    public long getEnergy() {
+        return energy;
     }
 
-    public DoubleLong getEnergyMaxInput() {
-        return DoubleLong.of(energyMaxInput);
+    public long getEnergyMaxInput() {
+        return energyMaxInput;
     }
 
-    public DoubleLong getTotalOutputEnergy() {
+    public long getTotalOutputEnergy() {
         return totalOutput;
     }
 
@@ -199,28 +227,16 @@ public class MachineRecipe implements Recipe<Container> {
         public MachineRecipe fromJson(ResourceLocation id, JsonObject json) {
             ResourceLocation machineID = new ResourceLocation(json.get("machine").getAsString());
 
-            List<Pair<Ingredient, Integer>> inputs = new ArrayList<>();
-
+            List<RecipeIngredient> inputs = new ArrayList<>();
             for (JsonElement element : json.getAsJsonArray("inputs")) {
                 JsonObject object = element.getAsJsonObject();
-                inputs.add(Pair.of(Ingredient.fromJson(object.get("ingredient")), object.has("count") ? object.get("count").getAsInt() : 1));
+                inputs.add(RecipeIngredient.of(object));
             }
 
-            List<RecipeIngredient> results = new ArrayList<>();
-
+            List<RecipeResult> results = new ArrayList<>();
             for (JsonElement element : json.getAsJsonArray("results")) {
                 JsonObject object = element.getAsJsonObject();
-                RecipeIngredient.ResultType type = RecipeIngredient.ResultType.valueOf(object.get("type").getAsString().toUpperCase(Locale.ROOT));
-                switch (type) {
-                    case ITEM:
-                        results.add(RecipeIngredient.of(ShapedRecipe.itemFromJson(object)));
-                        break;
-                    case ENERGY:
-                        results.add(RecipeIngredient.of(DoubleLong.of(object.get("amount").getAsDouble())));
-                        break;
-                    case FLUID:
-                        results.add(RecipeIngredient.of(FluidStack.create(Utils.getRegistryItem(Registry.FLUID, new ResourceLocation(object.get("fluid").getAsString())), Fraction.ofWhole(object.get("amount").getAsLong()))));
-                }
+                results.add(RecipeResult.of(object));
             }
 
             if (json.has("time") && json.has("energy")) {
@@ -229,12 +245,9 @@ public class MachineRecipe implements Recipe<Container> {
             }
 
             long time = json.has("time") ? json.get("time").getAsLong() : 0;
+            long energyMaxInput = json.has("energyMaxInput") ? json.get("energyMaxInput").getAsLong() : 0;
 
-            DoubleLong energy = DoubleLong.of(json.has("energy") ? json.get("energy").getAsDouble() : 0);
-
-            DoubleLong energyMaxInput = DoubleLong.of(json.has("energyMaxInput") ? json.get("energyMaxInput").getAsDouble() : energy.doubleValue);
-
-            return new MachineRecipe(id, machineID, inputs, results, time, energy, energyMaxInput);
+            return new MachineRecipe(id, machineID, inputs, results, time, energyMaxInput);
         }
 
         @Override
@@ -243,24 +256,19 @@ public class MachineRecipe implements Recipe<Container> {
 
             ResourceLocation machineID = new ResourceLocation(tag.getString("machine"));
 
-            List<Pair<Ingredient, Integer>> inputs = new ArrayList<>();
-            for (Tag input : tag.getList("inputs", 10)) {
-                CompoundTag compound = ((CompoundTag) input);
-                List<ItemStack> items = new ArrayList<>();
-                for (Tag item : compound.getList("items", 10))
-                    items.add(ItemStack.of((CompoundTag) item));
-                inputs.add(Pair.of(Ingredient.of(items.stream()), compound.getInt("count")));
-            }
+            List<RecipeIngredient> inputs = new ArrayList<>();
+            for (Tag input : tag.getList("inputs", 10))
+                inputs.add(RecipeIngredient.of((CompoundTag) input));
 
-            List<RecipeIngredient> results = new ArrayList<>();
+
+            List<RecipeResult> results = new ArrayList<>();
             for (Tag input : tag.getList("results", 10))
-                results.add(RecipeIngredient.of((CompoundTag) input));
+                results.add(RecipeResult.of((CompoundTag) input));
 
             long time = tag.getLong("time");
-            DoubleLong energy = DoubleLong.of(tag.getDouble("energy"));
-            DoubleLong energyMaxInput = DoubleLong.of(tag.getDouble("energyMaxInput"));
+            long energyMaxInput = tag.getLong("energyMaxInput");
 
-            return new MachineRecipe(id, machineID, inputs, results, time, energy, energyMaxInput);
+            return new MachineRecipe(id, machineID, inputs, results, time, energyMaxInput);
         }
 
         @Override
@@ -269,24 +277,17 @@ public class MachineRecipe implements Recipe<Container> {
             tag.putString("machine", recipe.getMachineID().toString());
 
             ListTag inputs = new ListTag();
+            for (RecipeIngredient input : recipe.getInputs())
+                inputs.add(input.save(new CompoundTag()));
 
-            for (Pair<Ingredient, Integer> input : recipe.getInputs()) {
-                CompoundTag compound = new CompoundTag();
-                ListTag items = new ListTag();
-                for (ItemStack item : ((IngredientExtension) (Object) input.getFirst()).getItemsServer())
-                    items.add(item.save(new CompoundTag()));
-                compound.putInt("count", input.getSecond());
-                compound.put("items", items);
-                inputs.add(compound);
-            }
             ListTag results = new ListTag();
-            for (RecipeIngredient result : recipe.getResults())
+            for (RecipeResult result : recipe.getResults())
                 results.add(result.save(new CompoundTag()));
+
             tag.put("inputs", inputs);
             tag.put("results", results);
             tag.putLong("time", recipe.getTime());
-            tag.putDouble("energy", recipe.getEnergy().doubleValue);
-            tag.putDouble("energyMaxInput", recipe.getEnergyMaxInput().doubleValue);
+            tag.putLong("energyMaxInput", recipe.getEnergyMaxInput());
             buf.writeNbt(tag);
         }
 

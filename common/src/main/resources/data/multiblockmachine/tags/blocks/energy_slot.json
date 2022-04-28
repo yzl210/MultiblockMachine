@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "multiblockmachine:energy_input_slot",
     "multiblockmachine:energy_output_slot"

@@ -1,43 +1,36 @@
 package cn.leomc.multiblockmachine.common.blockentity.fluidslot;
 
-import cn.leomc.multiblockmachine.common.api.FluidHandler;
+import cn.leomc.multiblockmachine.common.api.SingleFluidHandler;
 import cn.leomc.multiblockmachine.common.api.IFluidSlot;
 import cn.leomc.multiblockmachine.common.blockentity.UpgradableBlockEntity;
 import cn.leomc.multiblockmachine.common.menu.fluidslot.FluidSlotMenu;
-import me.shedaniel.architectury.extensions.BlockEntityExtension;
-import me.shedaniel.architectury.utils.Fraction;
-import net.minecraft.core.Registry;
+import dev.architectury.hooks.block.BlockEntityHooks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FluidSlotBlockEntity extends UpgradableBlockEntity implements MenuProvider, IFluidSlot, BlockEntityExtension, TickableBlockEntity {
+public abstract class FluidSlotBlockEntity extends UpgradableBlockEntity implements MenuProvider, IFluidSlot {
 
-    protected FluidHandler fluid;
+    protected SingleFluidHandler fluid;
 
-    public FluidSlotBlockEntity(BlockEntityType<?> blockEntityType) {
-        super(blockEntityType);
-        fluid = new FluidHandler(Fluids.EMPTY, 10000, Fraction.of(0, 1));
+    public FluidSlotBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+        super(blockEntityType, pos, state);
+        fluid = new SingleFluidHandler(10000, 1000, 1000, unused -> {
+            if(!level.isClientSide)
+                BlockEntityHooks.syncData(this);
+        });
     }
 
-    @Override
-    public void tick() {
-        if (level.isClientSide)
-            return;
-        syncData();
-    }
-
-    public FluidHandler getFluid() {
+    public SingleFluidHandler getFluidHandler() {
         return fluid;
     }
 
@@ -48,32 +41,25 @@ public abstract class FluidSlotBlockEntity extends UpgradableBlockEntity impleme
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
-        super.load(state, tag);
-        Fluid fluid = Registry.FLUID.getOptional(new ResourceLocation(tag.getString("fluid"))).orElse(Fluids.EMPTY);
-        Fraction fraction = Fraction.ofWhole(tag.getLong("amount"));
-        this.fluid.setFluid(fluid, fraction);
+    public void load(CompoundTag tag) {
+        this.fluid.load(tag.getCompound("fluid"));
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
-        tag.putString("fluid", Registry.FLUID.getKey(fluid.getFluidStack().getFluid()).toString());
-        tag.putLong("amount", fluid.getFluidStack().getAmount().getNumerator());
-        return super.save(tag);
+    public void saveAdditional(CompoundTag tag) {
+        tag.put("fluid", fluid.save(new CompoundTag()));
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void loadClientData(BlockState state, CompoundTag tag) {
-        Fluid fluid = Registry.FLUID.getOptional(new ResourceLocation(tag.getString("fluid"))).orElse(Fluids.EMPTY);
-        Fraction fraction = Fraction.ofWhole(tag.getLong("amount"));
-        this.fluid.setFluid(fluid, fraction);
-    }
-
-    @Override
-    public CompoundTag saveClientData(CompoundTag tag) {
-        tag.putString("fluid", Registry.FLUID.getKey(fluid.getFluidStack().getFluid()).toString());
-        tag.putLong("amount", fluid.getFluidStack().getAmount().getNumerator());
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = new CompoundTag();
+        saveAdditional(tag);
         return tag;
     }
-
 }

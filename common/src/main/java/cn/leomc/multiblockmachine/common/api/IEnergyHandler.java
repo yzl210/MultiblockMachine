@@ -2,18 +2,20 @@ package cn.leomc.multiblockmachine.common.api;
 
 public interface IEnergyHandler {
 
-    DoubleLong receiveEnergy(DoubleLong maxReceive, boolean simulate, boolean force);
+    long receiveEnergy(long maxReceive, boolean simulate, boolean force);
 
-    DoubleLong extractEnergy(DoubleLong maxExtract, boolean simulate, boolean force);
+    long extractEnergy(long maxExtract, boolean simulate, boolean force);
 
-    void setEnergyStored(DoubleLong energy);
+    void setEnergyStored(long energy);
 
-    DoubleLong getEnergy();
+    long getEnergy();
 
-    DoubleLong getMaxEnergy();
+    long getMaxEnergy();
 
     boolean canExtract();
 
     boolean canReceive();
+
+    IEnergyHandler copy();
 
 }

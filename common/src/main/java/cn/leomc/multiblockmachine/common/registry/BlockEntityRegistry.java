@@ -1,6 +1,7 @@
 package cn.leomc.multiblockmachine.common.registry;
 
 import cn.leomc.multiblockmachine.MultiblockMachine;
+import cn.leomc.multiblockmachine.common.block.CreativeEnergySourceBlock;
 import cn.leomc.multiblockmachine.common.block.energyslot.EnergyInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.energyslot.EnergyOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.fluidslot.FluidInputSlotBlock;
@@ -8,6 +9,7 @@ import cn.leomc.multiblockmachine.common.block.fluidslot.FluidOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemInputSlotBlock;
 import cn.leomc.multiblockmachine.common.block.itemslot.ItemOutputSlotBlock;
 import cn.leomc.multiblockmachine.common.blockentity.ControllerBlockEntity;
+import cn.leomc.multiblockmachine.common.blockentity.CreativeEnergySourceBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.InstructionBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.energyslot.EnergyInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.energyslot.EnergyOutputSlotBlockEntity;
@@ -15,8 +17,8 @@ import cn.leomc.multiblockmachine.common.blockentity.fluidslot.FluidInputSlotBlo
 import cn.leomc.multiblockmachine.common.blockentity.fluidslot.FluidOutputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemInputSlotBlockEntity;
 import cn.leomc.multiblockmachine.common.blockentity.itemslot.ItemOutputSlotBlockEntity;
-import me.shedaniel.architectury.registry.DeferredRegister;
-import me.shedaniel.architectury.registry.RegistrySupplier;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -24,6 +26,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 public class BlockEntityRegistry {
 
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(MultiblockMachine.MODID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);
+
+    public static final RegistrySupplier<BlockEntityType<CreativeEnergySourceBlockEntity>> CREATIVE_ENERGY_SOURCE = BLOCK_ENTITIES.register("creative_energy_source",
+            () -> BlockEntityType.Builder.of(CreativeEnergySourceBlock::getBlockEntity, BlockRegistry.CREATIVE_ENERGY_SOURCE.get()).build(null));
+
 
 
     public static final RegistrySupplier<BlockEntityType<ControllerBlockEntity>> CONTROLLER = BLOCK_ENTITIES.register("controller",

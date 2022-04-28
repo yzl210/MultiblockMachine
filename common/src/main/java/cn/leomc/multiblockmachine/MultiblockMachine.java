@@ -12,17 +12,21 @@ import cn.leomc.multiblockmachine.common.api.recipe.MachineRecipe;
 import cn.leomc.multiblockmachine.common.api.recipe.MachineRecipeType;
 import cn.leomc.multiblockmachine.common.config.ModConfig;
 import cn.leomc.multiblockmachine.common.network.NetworkHandler;
+import cn.leomc.multiblockmachine.common.network.packet.ShowInstructionMessage;
 import cn.leomc.multiblockmachine.common.registry.BlockEntityRegistry;
 import cn.leomc.multiblockmachine.common.registry.ContainerMenuRegistry;
 import cn.leomc.multiblockmachine.common.registry.ModRegistry;
-import me.shedaniel.architectury.event.events.RecipeUpdateEvent;
-import me.shedaniel.architectury.event.events.TextureStitchEvent;
-import me.shedaniel.architectury.event.events.client.ClientLifecycleEvent;
-import me.shedaniel.architectury.platform.Platform;
-import me.shedaniel.architectury.registry.BlockEntityRenderers;
-import me.shedaniel.architectury.registry.MenuRegistry;
-import me.shedaniel.architectury.registry.ReloadListeners;
-import me.shedaniel.architectury.utils.Env;
+import dev.architectury.event.EventResult;
+import dev.architectury.event.events.client.ClientLifecycleEvent;
+import dev.architectury.event.events.client.ClientRecipeUpdateEvent;
+import dev.architectury.event.events.client.ClientTextureStitchEvent;
+import dev.architectury.event.events.common.InteractionEvent;
+import dev.architectury.event.events.common.PlayerEvent;
+import dev.architectury.platform.Platform;
+import dev.architectury.registry.ReloadListenerRegistry;
+import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
+import dev.architectury.registry.menu.MenuRegistry;
+import dev.architectury.utils.Env;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
@@ -30,9 +34,15 @@ import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.apache.logging.log4j.LogManager;
@@ -44,7 +54,15 @@ import java.util.function.Consumer;
     TODO:
      1. textures
      2. upgrades for slots(configs)
-     3. Structure display button
+     3. Structure display button(done except recipe showing for fabric)
+     5. improve GUI for slots and controller
+     6. Recipes for controller and slots
+     8. check for bugs
+     9. Add supports for other mod
+
+
+     DONE:
+     4. Add fluid support
  */
 
 public class MultiblockMachine {
@@ -61,12 +79,15 @@ public class MultiblockMachine {
         NetworkHandler.register();
         if (Platform.getEnvironment() == Env.CLIENT) {
             ClientLifecycleEvent.CLIENT_SETUP.register(this::onClientSetup);
-            TextureStitchEvent.PRE.register(this::onPreTextureStitch);
-            TextureStitchEvent.POST.register(this::onPostTextureStitch);
-            RecipeUpdateEvent.EVENT.register(this::onRecipeUpdate);
+            ClientTextureStitchEvent.PRE.register(this::onPreTextureStitch);
+            ClientTextureStitchEvent.POST.register(this::onPostTextureStitch);
+            ClientRecipeUpdateEvent.EVENT.register(this::onRecipeUpdate);
         }
-        ReloadListeners.registerReloadListener(PackType.SERVER_DATA, MultiblockStructures.INSTANCE);
+        InteractionEvent.RIGHT_CLICK_BLOCK.register(ShowInstructionMessage::onRightClickBlock);
+        PlayerEvent.PLAYER_QUIT.register(ShowInstructionMessage::onPlayerQuit);
+        ReloadListenerRegistry.register(PackType.SERVER_DATA, MultiblockStructures.INSTANCE);
     }
+
 
     private void onRecipeUpdate(RecipeManager manager) {
         for (MachineRecipe recipe : manager.getAllRecipesFor(MachineRecipeType.INSTANCE)) {
@@ -80,9 +101,8 @@ public class MultiblockMachine {
 
     @Environment(EnvType.CLIENT)
     private void onPreTextureStitch(TextureAtlas atlasTexture, Consumer<ResourceLocation> spriteAdder) {
-        if (atlasTexture.location() == InventoryMenu.BLOCK_ATLAS) {
+        if (atlasTexture.location() == InventoryMenu.BLOCK_ATLAS)
             Textures.REGISTRIES.forEach(spriteAdder);
-        }
     }
 
     @Environment(EnvType.CLIENT)
@@ -99,7 +119,7 @@ public class MultiblockMachine {
         MenuRegistry.registerScreenFactory(ContainerMenuRegistry.ITEM_SLOT.get(), ItemSlotScreen::new);
         MenuRegistry.registerScreenFactory(ContainerMenuRegistry.ENERGY_SLOT.get(), EnergySlotScreen::new);
         MenuRegistry.registerScreenFactory(ContainerMenuRegistry.FLUID_SLOT.get(), FluidSlotScreen::new);
-        BlockEntityRenderers.registerRenderer(BlockEntityRegistry.INSTRUCTION_BLOCK.get(), InstructionBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(BlockEntityRegistry.INSTRUCTION_BLOCK.get(), context -> new InstructionBlockEntityRenderer());
     }
 
 }
