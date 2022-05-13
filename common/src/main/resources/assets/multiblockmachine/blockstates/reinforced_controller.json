@@ -1,0 +1,280 @@
+{
+  "variants": {
+    "tier=empty,facing=north,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/formed"
+    },
+    "tier=empty,facing=north,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/unformed"
+    },
+    "tier=empty,facing=south,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/formed",
+      "y": 180
+    },
+    "tier=empty,facing=south,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/unformed",
+      "y": 180
+    },
+    "tier=empty,facing=west,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/formed",
+      "y": 270
+    },
+    "tier=empty,facing=west,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/unformed",
+      "y": 270
+    },
+    "tier=empty,facing=east,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/formed",
+      "y": 90
+    },
+    "tier=empty,facing=east,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/unformed",
+      "y": 90
+    },
+    "tier=empty,facing=up,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/formed",
+      "x": -90
+    },
+    "tier=empty,facing=up,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/unformed",
+      "x": -90
+    },
+    "tier=empty,facing=down,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/formed",
+      "x": 90
+    },
+    "tier=empty,facing=down,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/unformed",
+      "x": 90
+    },
+    "tier=iron,facing=north,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/formed"
+    },
+    "tier=iron,facing=north,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/unformed"
+    },
+    "tier=iron,facing=south,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/formed",
+      "y": 180
+    },
+    "tier=iron,facing=south,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/unformed",
+      "y": 180
+    },
+    "tier=iron,facing=west,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/formed",
+      "y": 270
+    },
+    "tier=iron,facing=west,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/unformed",
+      "y": 270
+    },
+    "tier=iron,facing=east,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/formed",
+      "y": 90
+    },
+    "tier=iron,facing=east,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/unformed",
+      "y": 90
+    },
+    "tier=iron,facing=up,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/formed",
+      "x": -90
+    },
+    "tier=iron,facing=up,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/unformed",
+      "x": -90
+    },
+    "tier=iron,facing=down,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/formed",
+      "x": 90
+    },
+    "tier=iron,facing=down,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/iron/unformed",
+      "x": 90
+    },
+    "tier=gold,facing=north,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/formed"
+    },
+    "tier=gold,facing=north,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/unformed"
+    },
+    "tier=gold,facing=south,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/formed",
+      "y": 180
+    },
+    "tier=gold,facing=south,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/unformed",
+      "y": 180
+    },
+    "tier=gold,facing=west,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/formed",
+      "y": 270
+    },
+    "tier=gold,facing=west,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/unformed",
+      "y": 270
+    },
+    "tier=gold,facing=east,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/formed",
+      "y": 90
+    },
+    "tier=gold,facing=east,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/unformed",
+      "y": 90
+    },
+    "tier=gold,facing=up,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/formed",
+      "x": -90
+    },
+    "tier=gold,facing=up,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/unformed",
+      "x": -90
+    },
+    "tier=gold,facing=down,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/formed",
+      "x": 90
+    },
+    "tier=gold,facing=down,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/gold/unformed",
+      "x": 90
+    },
+    "tier=diamond,facing=north,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/formed"
+    },
+    "tier=diamond,facing=north,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/unformed"
+    },
+    "tier=diamond,facing=south,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/formed",
+      "y": 180
+    },
+    "tier=diamond,facing=south,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/unformed",
+      "y": 180
+    },
+    "tier=diamond,facing=west,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/formed",
+      "y": 270
+    },
+    "tier=diamond,facing=west,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/unformed",
+      "y": 270
+    },
+    "tier=diamond,facing=east,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/formed",
+      "y": 90
+    },
+    "tier=diamond,facing=east,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/unformed",
+      "y": 90
+    },
+    "tier=diamond,facing=up,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/formed",
+      "x": -90
+    },
+    "tier=diamond,facing=up,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/unformed",
+      "x": -90
+    },
+    "tier=diamond,facing=down,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/formed",
+      "x": 90
+    },
+    "tier=diamond,facing=down,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/diamond/unformed",
+      "x": 90
+    },
+    "tier=emerald,facing=north,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/formed"
+    },
+    "tier=emerald,facing=north,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/unformed"
+    },
+    "tier=emerald,facing=south,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/formed",
+      "y": 180
+    },
+    "tier=emerald,facing=south,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/unformed",
+      "y": 180
+    },
+    "tier=emerald,facing=west,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/formed",
+      "y": 270
+    },
+    "tier=emerald,facing=west,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/unformed",
+      "y": 270
+    },
+    "tier=emerald,facing=east,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/formed",
+      "y": 90
+    },
+    "tier=emerald,facing=east,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/unformed",
+      "y": 90
+    },
+    "tier=emerald,facing=up,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/formed",
+      "x": -90
+    },
+    "tier=emerald,facing=up,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/unformed",
+      "x": -90
+    },
+    "tier=emerald,facing=down,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/formed",
+      "x": 90
+    },
+    "tier=emerald,facing=down,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/emerald/unformed",
+      "x": 90
+    },
+    "tier=netherite,facing=north,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/formed"
+    },
+    "tier=netherite,facing=north,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/unformed"
+    },
+    "tier=netherite,facing=south,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/formed",
+      "y": 180
+    },
+    "tier=netherite,facing=south,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/unformed",
+      "y": 180
+    },
+    "tier=netherite,facing=west,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/formed",
+      "y": 270
+    },
+    "tier=netherite,facing=west,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/unformed",
+      "y": 270
+    },
+    "tier=netherite,facing=east,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/formed",
+      "y": 90
+    },
+    "tier=netherite,facing=east,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/unformed",
+      "y": 90
+    },
+    "tier=netherite,facing=up,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/formed",
+      "x": -90
+    },
+    "tier=netherite,facing=up,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/unformed",
+      "x": -90
+    },
+    "tier=netherite,facing=down,formed=true": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/formed",
+      "x": 90
+    },
+    "tier=netherite,facing=down,formed=false": {
+      "model": "multiblockmachine:block/controller/reinforced/netherite/unformed",
+      "x": 90
+    }
+  }
+}

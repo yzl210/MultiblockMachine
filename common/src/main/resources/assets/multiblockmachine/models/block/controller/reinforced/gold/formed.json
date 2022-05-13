@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "multiblockmachine:block/controller/reinforced/gold/top",
+    "down": "multiblockmachine:block/controller/reinforced/gold/bottom",
+    "up": "multiblockmachine:block/controller/reinforced/gold/top",
+    "east": "multiblockmachine:block/controller/reinforced/gold/side_left",
+    "west": "multiblockmachine:block/controller/reinforced/gold/side_right",
+    "north": "multiblockmachine:block/controller/reinforced/gold/front_formed",
+    "south": "multiblockmachine:block/controller/reinforced/gold/back"
+  }
+}

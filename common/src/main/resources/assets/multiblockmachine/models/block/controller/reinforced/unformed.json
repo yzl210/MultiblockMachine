@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "multiblockmachine:block/controller/reinforced/top",
+    "down": "multiblockmachine:block/controller/reinforced/bottom",
+    "up": "multiblockmachine:block/controller/reinforced/top",
+    "east": "multiblockmachine:block/controller/reinforced/side_right",
+    "west": "multiblockmachine:block/controller/reinforced/side_left",
+    "north": "multiblockmachine:block/controller/reinforced/front_unformed",
+    "south": "multiblockmachine:block/controller/reinforced/back"
+  }
+}

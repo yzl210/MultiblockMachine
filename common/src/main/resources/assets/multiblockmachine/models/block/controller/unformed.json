@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:block/cube",
   "textures": {
-    "particle": "multiblockmachine:block/controller/side",
-    "down": "multiblockmachine:block/controller/side",
-    "up": "multiblockmachine:block/controller/side",
-    "east": "multiblockmachine:block/controller/side",
-    "west": "multiblockmachine:block/controller/side",
+    "particle": "multiblockmachine:block/controller/top",
+    "down": "multiblockmachine:block/controller/bottom",
+    "up": "multiblockmachine:block/controller/top",
+    "east": "multiblockmachine:block/controller/side_right",
+    "west": "multiblockmachine:block/controller/side_left",
     "north": "multiblockmachine:block/controller/front_unformed",
     "south": "multiblockmachine:block/controller/back"
   }

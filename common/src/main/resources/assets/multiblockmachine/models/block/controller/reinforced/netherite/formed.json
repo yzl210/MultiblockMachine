@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "multiblockmachine:block/controller/reinforced/netherite/top",
+    "down": "multiblockmachine:block/controller/reinforced/netherite/bottom",
+    "up": "multiblockmachine:block/controller/reinforced/netherite/top",
+    "east": "multiblockmachine:block/controller/reinforced/netherite/side_left",
+    "west": "multiblockmachine:block/controller/reinforced/netherite/side_right",
+    "north": "multiblockmachine:block/controller/reinforced/netherite/front_formed",
+    "south": "multiblockmachine:block/controller/reinforced/netherite/back"
+  }
+}

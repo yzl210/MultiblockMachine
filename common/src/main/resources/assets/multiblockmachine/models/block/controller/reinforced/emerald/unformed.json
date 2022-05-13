@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "multiblockmachine:block/controller/reinforced/emerald/top",
+    "down": "multiblockmachine:block/controller/reinforced/emerald/bottom",
+    "up": "multiblockmachine:block/controller/reinforced/emerald/top",
+    "east": "multiblockmachine:block/controller/reinforced/emerald/side_left",
+    "west": "multiblockmachine:block/controller/reinforced/emerald/side_right",
+    "north": "multiblockmachine:block/controller/reinforced/emerald/front_unformed",
+    "south": "multiblockmachine:block/controller/reinforced/emerald/back"
+  }
+}
