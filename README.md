@@ -6,9 +6,9 @@ Multiblock Machine is a Minecraft mod for modpack makers to create their own mul
 For more info, please visit our [Wiki page](https://github.com/yzl210/MultiblockMachine/wiki).
 
 ## Licenses
-License for textures in the mod: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+License for textures in the mod: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)<br>
 License for code: (...)
 
 ## Contributors
-Main Developer/Maintainer: [uzl210](https://github.com/yzl210)
-Artist: [temhotaokeaha](https://github.com/temhotaokeaha)
+- Main Developer/Maintainer: [uzl210](https://github.com/yzl210)
+- Artist: [temhotaokeaha](https://github.com/temhotaokeaha)
